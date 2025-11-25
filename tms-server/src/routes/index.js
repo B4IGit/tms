@@ -8,7 +8,7 @@
 // require statements
 const express = require("express");
 const router = express.Router();
-
+const { mongo } = require("../../src/utils/mongo");
 /**
  * @description
  * Route handler for the root path ('/').
