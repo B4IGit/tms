@@ -8,11 +8,11 @@ import { RouterOutlet } from '@angular/router';
   template: `
     <div class="container">
       <header>
-        <h1>Welcome to the MEAN Stack Starter Project</h1>
+        <h1>Task Application</h1>
       </header>
       <nav>
         <ul>
-          <li><a href="#">Home</a></li>
+          <li><a href="/task-list">Tasks</a></li>
           <li><a href="#">About</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
@@ -23,7 +23,7 @@ import { RouterOutlet } from '@angular/router';
         </section>
       </main>
       <footer>
-        <p>&copy; 2024 MEAN Stack Project</p>
+        <p>&copy; Task Application</p>
       </footer>
     </div>
   `,
@@ -55,7 +55,7 @@ import { RouterOutlet } from '@angular/router';
     main {
       flex: 1;
     }
-  `
+  `,
 })
 export class AppComponent {
   title = 'ets-client';
