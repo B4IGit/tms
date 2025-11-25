@@ -6,7 +6,7 @@
  */
 
 // require statements
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
 /**
@@ -33,11 +33,17 @@ const router = express.Router();
  * //   "message": "Hello from the ETS server!"
  * // }
  */
-router.get('/', function(req, res, next) {
-  const appName = 'Task Management System';
-  res.send({
-    message: `Hello from the ${appName} server!`
-  });
+router.get("/", function (req, res, next) {
+  try {
+    mongo(async (db) => {
+      const users = await db.collection("users").find().toArray();
+      console.log("List of all users in the database:", users);
+      res.send(users);
+    }, next);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 });
 
 module.exports = router;
