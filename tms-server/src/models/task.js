@@ -1,41 +1,30 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const express = require("express");
+const { mongo } = require("../../utils/mongo");
+const { ObjectId } = require("mongodb");
 
-const taskSchema = new Schema({
-  title: { type: String, required: [true, "Task name is required"] },
-  description: {
-    type: String,
-    required: [true, "Task description is required"],
-  },
-  status: {
-    type: String,
-    required: [true, "Task status is required"],
-    enum: {
-      values: ["Pending", "In Progress", "Completed"],
-      message: "`{VALUE}` is not a valid enum value for path `status`.",
-    },
-  },
-  priority: {
-    type: String,
-    required: [true, "Task priority is required"],
-    enum: {
-      values: ["Low", "Medium", "High"],
-      message: "`{VALUE}` is not a valid enum value for path `priority`.",
-    },
-  },
-  dueDate: { type: Date },
-  dateCreated: { type: Date, default: Date.now },
-  dateModified: { type: Date },
-  projectId: { type: Number, required: [true, "Project ID is required"] },
-});
+const router = express.Router();
 
-taskSchema.pre("save", function (next) {
-  if (!this.isNew) {
-    this.dateModified = new Date();
+// GET /task/:id
+router.get("/:id", (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    mongo(async (db) => {
+      const task = await db
+        .collection("tasks")
+        .findOne({ _id: new ObjectId(id) });
+
+      if (!task) {
+        return res.status(404).send({ message: "Task not found" });
+      }
+
+      res.send(task);
+    }, next);
+
+  } catch (err) {
+    next(err);
   }
-  next();
 });
 
-module.exports = {
-  Task: mongoose.model("Task", taskSchema),
-};
+module.exports = router;
+

@@ -33,6 +33,7 @@ const { mongo } = require("../../src/utils/mongo");
  * //   "message": "Hello from the ETS server!"
  * // }
  */
+
 router.get("/", function (req, res, next) {
   try {
     mongo(async (db) => {
@@ -43,7 +44,11 @@ router.get("/", function (req, res, next) {
   } catch (err) {
     console.error(err);
     next(err);
+
+
+
   }
 });
 
 module.exports = router;
+

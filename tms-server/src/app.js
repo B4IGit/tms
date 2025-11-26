@@ -14,7 +14,7 @@ const { notFoundHandler, errorHandler } = require("./error-handler");
 
 // Importing the index router
 const indexRouter = require("./routes/index");
-const taskRouter = require("./routes/task");
+const taskRouter = require("./routes/task/index");
 
 // Variable declaration for the express app
 let app = express();
