@@ -24,7 +24,7 @@ let app = express();
 // Mongoose connection
 const connectionString = "mongodb+srv://gms_user:HiJETfd7H7GdUbwF@bellevueuniversity.qxxmbuj.mongodb.net/?appName=BellevueUniversity";
 
-const dbName = "tms";
+const dbName = "TMS-DATABASE";
 
 // Function to connect to the database
 async function connectToDatabase() {
