@@ -10,14 +10,35 @@ const express = require("express");
 const createError = require("http-errors");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const mongoose = require("mongoose");
 const { notFoundHandler, errorHandler } = require("./error-handler");
 
 // Importing the index router
 const indexRouter = require("./routes/index");
+const projectRouter = require("./routes/project")
 const taskRouter = require("./routes/task");
 
 // Variable declaration for the express app
 let app = express();
+
+// Mongoose connection
+const connectionString = "mongodb+srv://gms_user:HiJETfd7H7GdUbwF@bellevueuniversity.qxxmbuj.mongodb.net/?appName=BellevueUniversity";
+
+const dbName = "tms";
+
+// Function to connect to the database
+async function connectToDatabase() {
+    try {
+        await mongoose.connect(connectionString, {
+            dbName: dbName,
+        });
+        console.log(`Connection to the '${dbName}' database was successful!`);
+    } catch (err) {
+        console.error(`MongoDB connection error: ${err}`);
+    }
+}
+
+connectToDatabase(); // Call the function to connect to the database
 
 // CORS configuration
 app.use((req, res, next) => {
@@ -41,6 +62,7 @@ app.use(cookieParser());
 
 // Routing configuration
 app.use("/api", indexRouter);
+app.use("/api/projects", projectRouter)
 app.use("/api/tasks", taskRouter);
 
 // Use the error handling middleware
