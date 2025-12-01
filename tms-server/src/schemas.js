@@ -5,11 +5,17 @@ const addTaskSchema = {
         description: { type: "string", maxLength: 500 },
         status: { type: "string", enum: ["Pending", "In Progress", "Completed"] },
         priority: { type: "string", enum: ["Low", "Medium", "High"] },
+        dueDate: {
+            type: "string",
+            pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+        },
         dateCreated: {
             type: "string",
-            pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$"
-        }
+            pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+        },
     },
     required: ["title", "status", "priority"],
-    additionalProperties: false
-}
+    additionalProperties: false,
+};
+
+module.exports = { addTaskSchema };

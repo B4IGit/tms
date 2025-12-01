@@ -40,6 +40,21 @@ describe("Task API", () => {
         "must be equal to one of the allowed values"
       );
     });
+
+    it("should return validation error when required field is missing", async () => {
+        const response = await request(app).post("/api/tasks/1").send({
+            // Missing title
+            description: "Write the documentation for the project",
+            status: "In Progress",
+            priority: "High",
+            dueDate: "2021-01-10T00:00:00.000Z",
+        });
+
+        expect(response.status).toBe(400);
+        const errorMessages = response.body.message;
+
+        expect(errorMessages).toBe("data must have required property 'title'");
+    })
   });
 
   describe("GET /api/tasks", () => {

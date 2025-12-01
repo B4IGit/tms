@@ -5,6 +5,10 @@ const { Task } = require("../../models/task");
 const { addTaskSchema } = require("../../schemas");
 const router = express.Router();
 
+const ajv = new Ajv();
+
+const validateAddTask = ajv.compile(addTaskSchema);
+
 // GET return all tasks
 router.get("/", async (req, res, next) => {
   try {
@@ -36,12 +40,23 @@ router.get("/:id", async (req, res, next) => {
 // POST request to create a new task to the task's collection
 router.post("/:projectId", async (req, res, next) => {
   try {
-    const task = new Task(req.body);
+    const valid = validateAddTask(req.body);
+
+    if (!valid) {
+        return next(createError(400, ajv.errorsText(validateAddTask.errors)));
+    }
+
+    const payload = {
+        ...req.body,
+        projectId: req.params.projectId
+    };
+
+    const task = new Task(payload);
     await task.save();
 
     res.send({
       message: "Task created successfully",
-      taskId: task.taskId,
+      taskId: task._id,
     });
   } catch (err) {
     console.error(`Error while creating task: ${err}`);
