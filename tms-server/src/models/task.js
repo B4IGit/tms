@@ -2,31 +2,42 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const taskSchema = new Schema({
-  title: { type: String, required: [true, "Task name is required"] },
+  title: {
+      type: String,
+      required: [true, "Task name is required"],
+      minlength: [3, "Task name must be at least 3 characters"],
+      maxlength: [100, "Task name cannot not exceed 100 characters"],
+      unique: true
+  },
   description: {
     type: String,
     required: [true, "Task description is required"],
+    maxlength: [500, "Task description cannot exceed 255 characters"]
   },
   status: {
     type: String,
+    enum: ["Pending", "In Progress", "Completed"],
     required: [true, "Task status is required"],
-    enum: {
-      values: ["Pending", "In Progress", "Completed"],
-      message: "`{VALUE}` is not a valid enum value for path `status`.",
-    },
   },
   priority: {
     type: String,
+    enum: ["Low", "Medium", "High"],
     required: [true, "Task priority is required"],
-    enum: {
-      values: ["Low", "Medium", "High"],
-      message: "`{VALUE}` is not a valid enum value for path `priority`.",
-    },
   },
-  dueDate: { type: Date },
-  dateCreated: { type: Date, default: Date.now },
-  dateModified: { type: Date },
-  projectId: { type: Number, required: [true, "Project ID is required"] },
+  dueDate: {
+      type: Date
+  },
+  dateCreated: {
+      type: Date,
+      default: Date.now
+  },
+  dateModified: {
+      type: Date
+  },
+  projectId: {
+      type: Number,
+      required: [true, "Project ID is required"]
+  },
 });
 
 taskSchema.pre("save", function (next) {
