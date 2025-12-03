@@ -7,6 +7,7 @@ import {
 import { TaskService } from './tasks.service';
 import { environment } from '../../environments/environment';
 import { Task } from './task';
+// import { AddTaskDTO } from './task'
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -42,5 +43,28 @@ describe('TaskService', () => {
     const req = httpMock.expectOne(`${environment.apiBaseUrl}/api/tasks`);
     expect(req.request.method).toBe('GET');
     req.flush(mockTasks);
+  });
+
+  it("should add a new task", () => {
+    const newTask: Task = {
+      _id: "2",
+      title: "Task 2",
+      description: "Should add a new task.",
+      status: "In Progress",
+      priority: "High",
+      dueDate: "2026-01-01T00:00:00.000Z",
+      dateCreated: "2025-12-02T00:00:00.000Z",
+      dateModified: "2025-12-05T00:00:00.000Z",
+      projectId: 1000,
+    }
+
+    service.addTask(newTask).subscribe(task => {
+      expect(task).toEqual(newTask);
+      }
+    );
+
+    const req = httpMock.expectOne(`${environment.apiBaseUrl}/api/tasks`);
+    expect(req.request.method).toBe('POST');
+    req.flush(newTask);
   });
 });

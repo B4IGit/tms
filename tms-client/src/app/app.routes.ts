@@ -1,14 +1,35 @@
-import { Routes } from '@angular/router';
+import { Routes, Route } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ListTasksComponent } from './tasks/list-tasks/list-tasks.component';
+import { TaskAddComponent } from './tasks/task-add/task-add.component';
+
+// Lazy-load the MainLayout which contains the aside navigation
+const loadMainLayout = () =>
+  import('./layouts/main-layout/main-layout.component').then(
+    (m) => m.MainLayoutComponent
+  );
+
+// Routes that render WITHOUT the aside
+const baseRoutes: Route = { path: '', component: HomeComponent };
+
+// Routes that render WITH the aside (tasks and projects only)
+const layoutRoutes: Route = {
+  path: '',
+  loadComponent: loadMainLayout,
+  children: [
+    // Tasks
+    { path: 'task-list', component: ListTasksComponent },
+    { path: 'tasks', redirectTo: 'task-list', pathMatch: 'full' },
+    { path: 'tasks/add', component: TaskAddComponent },
+
+    // Projects (placeholder children can be added later)
+    { path: 'projects', children: [] },
+  ],
+};
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: HomeComponent,
-  },
-  {
-    path: 'task-list',
-    component: ListTasksComponent,
-  },
+  baseRoutes,
+  layoutRoutes,
+  { path: '**', redirectTo: '' },
 ];
+

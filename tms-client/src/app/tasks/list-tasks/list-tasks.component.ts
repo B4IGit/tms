@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../task';
 import { TaskService } from '../tasks.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-list-tasks',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   template: `
     <div class="task-container">
       <h2>All Tasks</h2>
@@ -70,4 +71,5 @@ export class ListTasksComponent {
       },
     });
   }
+
 }
