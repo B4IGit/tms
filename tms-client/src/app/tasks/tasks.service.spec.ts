@@ -37,6 +37,7 @@ describe('TaskService', () => {
     ];
 
     service.getTasks().subscribe((tasks) => {
+      expect(tasks.length).toBe(2);
       expect(tasks).toEqual(mockTasks);
     });
 
