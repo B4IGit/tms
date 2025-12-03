@@ -5,6 +5,9 @@ export interface Task {
   status: string;
   priority: string;
   dueDate: string;
+  dateCreated: string;
+  dateModified: string;
+  projectId: number;
 }
 
-export type AddTaskDTO = Omit<Task, '_id' | 'dateModified'>;
+export type AddTaskDTO = Omit<Task, '_id' | 'projectId' | 'dueDate' | 'dateCreated' | 'dateModified'>;
