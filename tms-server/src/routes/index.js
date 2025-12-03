@@ -34,10 +34,10 @@ const router = express.Router();
  * // }
  */
 router.get('/', function(req, res, next) {
-  const appName = 'Task Management System';
-  res.send({
-    message: `Hello from the ${appName} server!`
-  });
+    const appName = 'Task Management System';
+    res.send({
+        message: `Hello from the ${appName} server!`
+    });
 });
 
 module.exports = router;
