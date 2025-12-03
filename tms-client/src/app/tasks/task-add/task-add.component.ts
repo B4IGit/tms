@@ -16,6 +16,7 @@ import { AddTaskDTO } from '../task';
 
       <div class="add-task-page_card">
         <form [formGroup]="taskForm" class="add-task-page_form">
+
           <!-- Title -->
           <div class="add-task-page_form-group">
             <label for="title" class="task-add-page_form-label">Task Name</label>
@@ -48,7 +49,7 @@ import { AddTaskDTO } from '../task';
             </select>
           </div>
 
-          <!-- Date Created -->
+          <!-- Due Date -->
           <div class="task-add-page_form-group">
             <label for="dueDate" class="task-add-page_form-label">Due Date</label>
             <input type="datetime-local" id="dueDate" class="task-add-page_form-control" formControlName="dueDate">
@@ -144,7 +145,7 @@ export class TaskAddComponent {
         description: this.taskForm.controls["description"].value,
         status: this.taskForm.controls["status"].value,
         priority: this.taskForm.controls["priority"].value,
-        dueDate: dueDate
+
       };
 
       console.log("Creating Task: ", newTask);
