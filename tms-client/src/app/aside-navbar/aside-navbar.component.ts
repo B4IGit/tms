@@ -31,6 +31,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         <li>
           <a
             routerLink="/projects/projects-list"
+
+        <li class="aside-section mt">Projects</li>
+        <li>
+          <a
+            routerLink="/projects"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
             >All Projects</a
