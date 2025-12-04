@@ -1,20 +1,22 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { Task } from './task';
-import { AddTaskDTO } from './task'
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Task, AddTaskDTO } from './task'; // make sure AddTaskDTO is exported
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class TaskService {
   constructor(private http: HttpClient) {}
 
-  getTasks() {
-    return this.http.get<Task[]>(`${environment.apiBaseUrl}/api/tasks`);
+  getTasks(): Observable<Task[]> {
+    return this.http.get<Task[]>('/api/tasks');
   }
 
-  addTask(task: AddTaskDTO) {
-    return this.http.post<Task>(`${environment.apiBaseUrl}/api/tasks`, task);
+  getTaskById(id: string): Observable<Task> {
+    return this.http.get<Task>(`/api/tasks/${id}`);
+  }
+
+  
+  addTask(payload: AddTaskDTO): Observable<Task> {
+    return this.http.post<Task>('/api/tasks', payload);
   }
 }

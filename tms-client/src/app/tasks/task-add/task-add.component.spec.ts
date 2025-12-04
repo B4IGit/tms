@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ActivatedRoute } from '@angular/router';
 import { TaskAddComponent } from './task-add.component';
 
 describe('TaskAddComponent', () => {
@@ -8,9 +9,19 @@ describe('TaskAddComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskAddComponent]
-    })
-    .compileComponents();
+      imports: [
+        HttpClientTestingModule,
+        TaskAddComponent   // standalone component
+      ],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { paramMap: { get: () => '123' } }
+          }
+        }
+      ]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TaskAddComponent);
     component = fixture.componentInstance;
