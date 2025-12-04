@@ -1,7 +1,9 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Task } from './task';
+import { AddTaskDTO } from './task';
 import { Observable } from 'rxjs';
-import { Task, AddTaskDTO } from './task'; // make sure AddTaskDTO is exported
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
@@ -10,13 +12,20 @@ export class TaskService {
   getTasks(): Observable<Task[]> {
     return this.http.get<Task[]>('/api/tasks');
   }
-
   getTaskById(id: string): Observable<Task> {
     return this.http.get<Task>(`/api/tasks/${id}`);
   }
+  addTask(task: AddTaskDTO, projectId: number = 1000) {
+    return this.http.post<Task>(
+      `${environment.apiBaseUrl}/api/tasks/${projectId}`,
+      task
+    );
+  }
 
-  
-  addTask(payload: AddTaskDTO): Observable<Task> {
-    return this.http.post<Task>('/api/tasks', payload);
+  findTask(term: string): Observable<Task[]> {
+    const params = new HttpParams().set('term', term);
+    return this.http.get<Task[]>(`${environment.apiBaseUrl}/api/tasks/search`, {
+      params,
+    });
   }
 }

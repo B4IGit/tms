@@ -19,9 +19,35 @@ import { RouterLink } from '@angular/router';
 
       <ul *ngIf="!loading && tasks.length > 0; else noTasks">
         <li *ngFor="let task of tasks" class="task-item">
-          <strong>{{ task.title }}</strong
+          <strong>Title:</strong> {{ task.title }}<br />
+
+          <small *ngIf="task.description">
+            <strong>Description:</strong> {{ task.description }} </small
           ><br />
-          <small *ngIf="task.description">{{ task.description }}</small>
+
+          <small *ngIf="task.status">
+            <strong>Status:</strong> {{ task.status }} </small
+          ><br />
+
+          <small *ngIf="task.priority">
+            <strong>Priority:</strong> {{ task.priority }} </small
+          ><br />
+
+          <small *ngIf="task.dueDate">
+            <strong>Due Date:</strong> {{ task.dueDate }} </small
+          ><br />
+
+          <small *ngIf="task.dateCreated">
+            <strong>Created:</strong> {{ task.dateCreated }} </small
+          ><br />
+
+          <small *ngIf="task.dateModified">
+            <strong>Modified:</strong> {{ task.dateModified }} </small
+          ><br />
+
+          <small *ngIf="task.projectId">
+            <strong>Project ID:</strong> {{ task.projectId }} </small
+          ><br />
         </li>
       </ul>
 
@@ -71,5 +97,4 @@ export class ListTasksComponent {
       },
     });
   }
-
 }

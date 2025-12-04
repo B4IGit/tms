@@ -13,4 +13,4 @@ export interface Task {
   dateModified?: string;
 }
 
-export type AddTaskDTO = Omit<Task, '_id' | 'dateModified'>;
+export type AddTaskDTO = Omit<Task, '_id' | 'projectId' | 'dateCreated' | 'dateModified'>;

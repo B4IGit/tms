@@ -20,6 +20,33 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// GET return task that matches search term
+router.get("/search", async (req, res, next) => {
+  try {
+    const { term } = req.query;
+
+    if (!term) {
+      return res.status(400).send({ message: "Missing search term" });
+    }
+
+    const regex = new RegExp(term, "i");
+
+    const results = await Task.find({
+      $or: [
+        { title: regex },
+        { description: regex },
+        { status: regex },
+        { priority: regex },
+      ],
+    });
+
+    res.send(results);
+  } catch (err) {
+    console.error(`Error while creating task: ${err}`);
+    next(err);
+  }
+});
+
 // GET /task/:id - read a task by id
 router.get("/:id", async (req, res, next) => {
   try {
@@ -43,12 +70,12 @@ router.post("/:projectId", async (req, res, next) => {
     const valid = validateAddTask(req.body);
 
     if (!valid) {
-        return next(createError(400, ajv.errorsText(validateAddTask.errors)));
+      return next(createError(400, ajv.errorsText(validateAddTask.errors)));
     }
 
     const payload = {
-        ...req.body,
-        projectId: req.params.projectId
+      ...req.body,
+      projectId: req.params.projectId,
     };
 
     const task = new Task(payload);
@@ -63,4 +90,5 @@ router.post("/:projectId", async (req, res, next) => {
     next(err);
   }
 });
+
 module.exports = router;
