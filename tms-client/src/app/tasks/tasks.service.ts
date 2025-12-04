@@ -14,7 +14,7 @@ export class TaskService {
     return this.http.get<Task[]>(`${environment.apiBaseUrl}/api/tasks`);
   }
 
-  addTask(task: AddTaskDTO) {
-    return this.http.post<Task>(`${environment.apiBaseUrl}/api/tasks`, task);
+  addTask(task: AddTaskDTO, projectId: number = 1000) {
+    return this.http.post<Task>(`${environment.apiBaseUrl}/api/tasks/${projectId}`, task);
   }
 }

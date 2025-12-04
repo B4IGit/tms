@@ -55,6 +55,14 @@ import { AddTaskDTO } from '../task';
             <input type="datetime-local" id="dueDate" class="task-add-page_form-control" formControlName="dueDate">
           </div>
 
+          <!-- Project Dropdown -->
+          <div class="task-add-page_form-group">
+            <label for="project" class="task-add-page_form-label">Select from a Project</label>
+            <select id="project" class="task-add-page_form-control" formControlName="project">
+              <option value="1">1000</option>
+            </select>
+          </div>
+
           <!-- Submit Button -->
           <button type="submit" class="btn task-add-page_btn" (click)="onSubmit()">Add Task</button>
         </form>
@@ -130,7 +138,8 @@ export class TaskAddComponent {
     description: [null, Validators.compose([Validators.required, Validators.maxLength(500)])],
     status: [null, Validators.required],
     priority: [null, Validators.required],
-    dueDate: [null, Validators.required]
+    dueDate: [null, Validators.required],
+    project: [null, Validators.required],
     }
   );
 
@@ -149,8 +158,8 @@ export class TaskAddComponent {
       };
 
       console.log("Creating Task: ", newTask);
-
-      this.taskService.addTask(newTask).subscribe({
+      const projectId = 1000;
+      this.taskService.addTask(newTask, projectId).subscribe({
         next: (result: any) => {
           console.log(`Task created successfully: ${result.message}`);
           this.router.navigate(['/tasks']);
