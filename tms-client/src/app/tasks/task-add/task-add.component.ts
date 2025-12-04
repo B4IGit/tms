@@ -21,12 +21,37 @@ import { AddTaskDTO } from '../task';
           <div class="add-task-page_form-group">
             <label for="title" class="task-add-page_form-label">Task Name</label>
             <input type="text" id="title" class="task-add-page_form-control" formControlName="title">
+
+            <div class="error-message" style="color: #7c0505;"
+                 *ngIf="taskForm.controls['title'].invalid && taskForm.controls['title'].touched">
+              <small *ngIf="taskForm.controls['title'].errors?.['required']">
+                Task name is required.
+              </small>
+              <small *ngIf="taskForm.controls['title'].errors?.['minlength']">
+                Task name must be at least 3 characters long.
+              </small>
+              <small *ngIf="taskForm.controls['title'].errors?.['maxlength']">
+                Task name cannot exceed 100 characters.
+              </small>
+            </div>
           </div>
 
           <!-- Description -->
           <div class="task-add-page_form-group">
             <label for="description" class="task-add-page_form-label">Task Description</label>
-            <textarea id="description" rows="10" class="task-add-page_form-control" formControlName="description"></textarea>
+            <textarea id="description" rows="10" class="task-add-page_form-control"
+                      formControlName="description">
+            </textarea>
+
+            <div class="error-message" style="color: #7c0505;"
+                 *ngIf="taskForm.controls['description'].invalid && taskForm.controls['description'].touched">
+              <small *ngIf="taskForm.controls['description'].errors?.['required']">
+                Task description is required.
+              </small>
+              <small *ngIf="taskForm.controls['title'].errors?.['minlength']">
+                Task description cannot exceed more than 500 characters.
+              </small>
+            </div>
           </div>
 
           <!-- Status Dropdown -->
@@ -37,6 +62,13 @@ import { AddTaskDTO } from '../task';
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
             </select>
+
+            <div class="error-message" style="color: #7c0505;"
+                 *ngIf="taskForm.controls['status'].invalid && taskForm.controls['status'].touched">
+              <small *ngIf="taskForm.controls['status'].errors?.['required']">
+                Task status is required.
+              </small>
+            </div>
           </div>
 
           <!-- Priority Dropdown -->
@@ -47,12 +79,26 @@ import { AddTaskDTO } from '../task';
               <option value="Medium">Medium</option>
               <option value="High">High</option>
             </select>
+
+            <div class="error-message" style="color: #7c0505;"
+                 *ngIf="taskForm.controls['priority'].invalid && taskForm.controls['priority'].touched">
+              <small *ngIf="taskForm.controls['priority'].errors?.['required']">
+                Task priority is required.
+              </small>
+            </div>
           </div>
 
           <!-- Due Date -->
           <div class="task-add-page_form-group">
             <label for="dueDate" class="task-add-page_form-label">Due Date</label>
             <input type="datetime-local" id="dueDate" class="task-add-page_form-control" formControlName="dueDate">
+
+            <div class="error-message" style="color: #7c0505;"
+                 *ngIf="taskForm.controls['dueDate'].invalid && taskForm.controls['dueDate'].touched">
+              <small *ngIf="taskForm.controls['dueDate'].errors?.['required']">
+                Task due date is required.
+              </small>
+            </div>
           </div>
 
           <!-- Project Dropdown -->
@@ -61,6 +107,13 @@ import { AddTaskDTO } from '../task';
             <select id="project" class="task-add-page_form-control" formControlName="project">
               <option value="1">1000</option>
             </select>
+
+            <div class="error-message" style="color: #7c0505;"
+                 *ngIf="taskForm.controls['project'].invalid && taskForm.controls['project'].touched">
+              <small *ngIf="taskForm.controls['project'].errors?.['required']">
+                Task project is required.
+              </small>
+            </div>
           </div>
 
           <!-- Submit Button -->
@@ -71,75 +124,75 @@ import { AddTaskDTO } from '../task';
     </div>
   `,
   styles: `
-  .task-add-page {
-    max-width: 80%;
-    margin: 0 auto;
-    padding: 2rem;
-  }
+    .task-add-page {
+      max-width: 80%;
+      margin: 0 auto;
+      padding: 2rem;
+    }
 
-  .task-add-page_title {
-    text-align: center;
-    color: var(--dark_blue);
-  }
+    .task-add-page_title {
+      text-align: center;
+      color: var(--dark_blue);
+    }
 
-  .task-add-page_subtitle {
-    text-align: center;
-    color: var(--medium_blue);
-    font-size: 0.9rem;
-    font-style: italic;
-    margin-bottom: 1.5rem;
-  }
+    .task-add-page_subtitle {
+      text-align: center;
+      color: var(--medium_blue);
+      font-size: 0.9rem;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
 
-  .add-task-page_card {
-    background-color: var(--bg_color);
-    border-radius: 0.5rem;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    margin-top: 1.5rem;
-  }
+    .add-task-page_card {
+      background-color: var(--bg_color);
+      border-radius: 0.5rem;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-top: 1.5rem;
+    }
 
-  .add-task-page_form {
-    display: flex;
-    flex-direction: column;
-  }
+    .add-task-page_form {
+      display: flex;
+      flex-direction: column;
+    }
 
-  .add-task-page_form-group {
-    margin-bottom: 1rem;
-  }
+    .add-task-page_form-group {
+      margin-bottom: 1rem;
+    }
 
-  .task-add-page_form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
+    .task-add-page_form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
 
-  .task-add-page_form-control {
-    width: 100%;
-    padding: 0.5rem;
-    border: 2px solid var(--medium_blue);
-    border-radius: 0.25rem;
-  }
+    .task-add-page_form-control {
+      width: 100%;
+      padding: 0.5rem;
+      border: 2px solid var(--medium_blue);
+      border-radius: 0.25rem;
+    }
 
-  .task-add-page_link {
-    color: var(--medium_blue);
-    text-decoration: none;
-    display: block;
-  }
+    .task-add-page_link {
+      color: var(--medium_blue);
+      text-decoration: none;
+      display: block;
+    }
 
-  .task-add-page_link:hover {
-    text-decoration: underline;
-  }
+    .task-add-page_link:hover {
+      text-decoration: underline;
+    }
 
   `
 })
 export class TaskAddComponent {
   taskForm: FormGroup = this.fb.group({
-    title: [null, Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(100)])],
-    description: [null, Validators.compose([Validators.required, Validators.maxLength(500)])],
-    status: [null, Validators.required],
-    priority: [null, Validators.required],
-    dueDate: [null, Validators.required],
-    project: [null, Validators.required],
+      title: [null, Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(100)])],
+      description: [null, Validators.compose([Validators.required, Validators.maxLength(500)])],
+      status: [null, Validators.required],
+      priority: [null, Validators.required],
+      dueDate: [null, Validators.required],
+      project: [null, Validators.required],
     }
   );
 
@@ -154,20 +207,21 @@ export class TaskAddComponent {
         description: this.taskForm.controls["description"].value,
         status: this.taskForm.controls["status"].value,
         priority: this.taskForm.controls["priority"].value,
+        dueDate: dueDate,
 
       };
 
       console.log("Creating Task: ", newTask);
       const projectId = 1000;
       this.taskService.addTask(newTask, projectId).subscribe({
-        next: (result: any) => {
-          console.log(`Task created successfully: ${result.message}`);
-          this.router.navigate(['/tasks']);
-        },
+          next: (result: any) => {
+            console.log(`Task created successfully: ${result.message}`);
+            this.router.navigate(['/tasks']);
+          },
 
-        error: (error) => {
-          console.error("Error creating task", error);
-        }
+          error: (error) => {
+            console.error("Error creating task", error);
+          }
         }
       )
     }

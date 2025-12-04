@@ -10,4 +10,4 @@ export interface Task {
   projectId: number;
 }
 
-export type AddTaskDTO = Omit<Task, '_id' | 'projectId' | 'dueDate' | 'dateCreated' | 'dateModified'>;
+export type AddTaskDTO = Omit<Task, '_id' | 'projectId' | 'dateCreated' | 'dateModified'>;
