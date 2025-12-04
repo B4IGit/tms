@@ -23,8 +23,6 @@ describe('ListTasksComponent', () => {
       providers: [TaskService],
     }).compileComponents();
 
-    // We'll inject the service here; for tests that need to spy on getTasks
-    // we will create the fixture *after* setting the spy.
     taskService = TestBed.inject(TaskService);
   });
 

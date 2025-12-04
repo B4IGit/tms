@@ -49,7 +49,7 @@ import {
 
       <button
         type="button"
-        class="btn task-find-page_btn"
+        class="task_btn"
         (click)="onSubmit()"
         [disabled]="taskForm.invalid"
       >
@@ -59,35 +59,124 @@ import {
       <!-- Results section -->
       <div *ngIf="searched">
         <h3>Search Results</h3>
-        <p *ngIf="tasks.length === 0">No tasks found.</p>
+        <ul *ngIf="tasks.length > 0; else noTasks">
+          <li *ngFor="let task of tasks" class="task-item">
+            <strong>Title:</strong> {{ task.title }}<br />
 
-        <ul *ngIf="tasks.length > 0">
-          <li *ngFor="let task of tasks">
-            <strong>{{ task.title }}</strong> - {{ task.description }}
+            <small *ngIf="task.description">
+              <strong>Description:</strong> {{ task.description }} </small
+            ><br />
+
+            <small *ngIf="task.status">
+              <strong>Status:</strong> {{ task.status }} </small
+            ><br />
+
+            <small *ngIf="task.priority">
+              <strong>Priority:</strong> {{ task.priority }} </small
+            ><br />
+
+            <small *ngIf="task.dueDate">
+              <strong>Due Date:</strong> {{ task.dueDate }} </small
+            ><br />
+
+            <small *ngIf="task.dateCreated">
+              <strong>Created:</strong> {{ task.dateCreated }} </small
+            ><br />
+
+            <small *ngIf="task.dateModified">
+              <strong>Modified:</strong> {{ task.dateModified }} </small
+            ><br />
+
+            <small *ngIf="task.projectId">
+              <strong>Project ID:</strong> {{ task.projectId }} </small
+            ><br />
           </li>
         </ul>
       </div>
+
+      <ng-template #noTasks>
+        <p>No tasks found.</p>
+      </ng-template>
     </div>
   `,
   styles: [
     `
       .task-find-page {
-        max-width: 80%;
-        margin: 0 auto;
-        padding: 2rem;
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 1.5rem;
       }
 
       .task-find-page_title {
         text-align: center;
         color: var(--dark_blue);
+        margin-bottom: 0.25rem;
       }
 
       .task-find-page_subtitle {
         text-align: center;
         color: var(--medium_blue);
-        font-size: 0.9rem;
-        font-style: italic;
         margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+      }
+
+      .add-task-page_form-group {
+        margin-bottom: 1rem;
+      }
+
+      .task-add-page_form-label {
+        display: block;
+        margin-bottom: 0.35rem;
+        font-weight: 600;
+      }
+
+      .task-add-page_form-control {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        box-sizing: border-box;
+      }
+
+      .task-add-page_form-control.ng-invalid.ng-touched {
+        border-color: #c0392b;
+      }
+
+      .error-message {
+        color: #c0392b;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+      }
+
+      .task_btn {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        background-color: var(--dark_blue);
+        color: white;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
+
+      .task_btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Results */
+      h3 {
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+      }
+
+      ul {
+        padding-left: 1rem;
+        margin: 0.5rem 0;
+      }
+
+      li {
+        margin-bottom: 0.5rem;
       }
     `,
   ],
