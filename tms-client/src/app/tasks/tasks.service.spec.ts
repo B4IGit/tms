@@ -60,7 +60,7 @@ describe('TaskService', () => {
       expect(tasks).toEqual(mockTasks);
     });
 
-    const req = httpMock.expectOne(`/api/tasks`);
+    const req = httpMock.expectOne(`${environment.apiBaseUrl}/api/tasks`);
     expect(req.request.method).toBe('GET');
     req.flush(mockTasks);
   });

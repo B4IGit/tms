@@ -91,7 +91,7 @@ export class ListTasksComponent {
       },
       error: (err: any) => {
         this.loading = false;
-        this.serverMessage = 'Error retrieving tasks.';
+        this.serverMessage = `Error retrieving tasks. ${err.message}`;
         this.serverMessageType = 'error';
         console.error('Error occurred while retrieving tasks:', err);
       },

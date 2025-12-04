@@ -10,11 +10,13 @@ export class TaskService {
   constructor(private http: HttpClient) {}
 
   getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>('/api/tasks');
+    return this.http.get<Task[]>(`${environment.apiBaseUrl}/api/tasks`);
   }
+
   getTaskById(id: string): Observable<Task> {
-    return this.http.get<Task>(`/api/tasks/${id}`);
+    return this.http.get<Task>(`/${environment.apiBaseUrl}api/tasks/${id}`);
   }
+
   addTask(task: AddTaskDTO, projectId: number = 1000) {
     return this.http.post<Task>(
       `${environment.apiBaseUrl}/api/tasks/${projectId}`,

@@ -24,7 +24,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         <li>
           <a routerLink="/tasks/search" routerLinkActive="active">Find Task</a>
         </li>
-
+        <li>
+          <a routerLink="/tasks/read" routerLinkActive="active">Read Task</a>
+        </li>
         <li class="aside-section mt">Projects</li>
         <li>
           <a
