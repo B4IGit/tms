@@ -10,11 +10,32 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     <nav class="aside-nav" aria-label="Secondary">
       <ul class="aside-list">
         <li class="aside-section">Tasks</li>
-        <li><a routerLink="/task-list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">View All Tasks</a></li>
-        <li><a routerLink="/tasks/add" routerLinkActive="active">Add Task</a></li>
-
+        <li>
+          <a
+            routerLink="/task-list"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >View All Tasks</a
+          >
+        </li>
+        <li>
+          <a routerLink="/tasks/add" routerLinkActive="active">Add Task</a>
+        </li>
+        <li>
+          <a routerLink="/tasks/search" routerLinkActive="active">Find Task</a>
+        </li>
+        <li>
+          <a routerLink="/tasks/read" routerLinkActive="active">Read Task</a>
+        </li>
         <li class="aside-section mt">Projects</li>
-        <li><a routerLink="/projects" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">All Projects</a></li>
+        <li>
+          <a
+            routerLink="/projects/projects-list"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >All Projects</a
+          >
+        </li>
       </ul>
     </nav>
   `,

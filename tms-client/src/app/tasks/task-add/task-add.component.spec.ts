@@ -14,14 +14,7 @@ describe('TaskAddComponent', () => {
       imports: [
         HttpClientTestingModule,
         TaskAddComponent, // standalone component
-      ],
-      providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: { paramMap: { get: () => '123' } },
-          },
-        },
+        RouterTestingModule,
       ],
     }).compileComponents();
 
