@@ -221,66 +221,115 @@ import { ProjectService } from '../../projects/projects.service';
     </div>
   `,
   styles: `
-    .task-add-page {
-      max-width: 80%;
-      margin: 0 auto;
-      padding: 2rem;
-    }
+  :host {
+    display: block;
+  }
 
-    .task-add-page_title {
-      text-align: center;
-      color: var(--dark_blue);
-    }
+  .task-add-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
 
-    .task-add-page_subtitle {
-      text-align: center;
-      color: var(--medium_blue);
-      font-size: 0.9rem;
-      font-style: italic;
-      margin-bottom: 1.5rem;
-    }
+  .task-add-page_title {
+    text-align: center;
+    color: var(--dark_blue);
+    margin-bottom: 0.25rem;
+  }
 
-    .add-task-page_card {
-      background-color: var(--bg_color);
-      border-radius: 0.5rem;
-      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-      padding: 2rem;
-      margin-top: 1.5rem;
-    }
+  .task-add-page_subtitle {
+    text-align: center;
+    color: var(--medium_blue);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+  }
 
+  .add-task-page_card {
+    background-color: var(--bg_color, #ffffff);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+  }
+
+  /* Form layout */
+  .add-task-page_form {
+    display: grid;
+    grid-template-columns: 1fr; /* mobile: single column */
+    gap: 1.25rem;
+  }
+
+  /* Form group layout */
+  .add-task-page_form-group,
+  .task-add-page_form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Uniform label spacing */
+  .task-add-page_form-label {
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+    margin-top: 0.1rem;
+  }
+
+  /* Inputs */
+  .task-add-page_form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid var(--medium_blue);
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+  }
+
+  textarea.task-add-page_form-control {
+    resize: vertical;
+  }
+
+  /* Error text spacing */
+  .error-message {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  /* Button */
+  .task-add-page_btn {
+    margin-top: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.25rem;
+  }
+
+  .task-add-page_link {
+    color: var(--medium_blue);
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 1rem;
+  }
+
+  .task-add-page_link:hover {
+    text-decoration: underline;
+  }
+
+  /* Responsive: two-column layout on larger screens only */
+  @media (min-width: 768px) {
     .add-task-page_form {
-      display: flex;
-      flex-direction: column;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 2rem;
     }
 
-    .add-task-page_form-group {
-      margin-bottom: 1rem;
+    /* Description + Project full width */
+    .task-add-page_form-group:nth-child(2),
+    .task-add-page_form-group:nth-child(6) {
+      grid-column: 1 / -1;
     }
 
-    .task-add-page_form-label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
+    /* Button full width row */
+    .task-add-page_btn {
+      grid-column: 1 / -1;
+      justify-self: flex-start;
     }
-
-    .task-add-page_form-control {
-      width: 100%;
-      padding: 0.5rem;
-      border: 2px solid var(--medium_blue);
-      border-radius: 0.25rem;
-    }
-
-    .task-add-page_link {
-      color: var(--medium_blue);
-      text-decoration: none;
-      display: block;
-    }
-
-    .task-add-page_link:hover {
-      text-decoration: underline;
-    }
-
-  `,
+  }
+`,
 })
 export class TaskAddComponent {
   projects: Project[] = [];

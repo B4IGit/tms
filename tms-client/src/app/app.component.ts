@@ -12,7 +12,6 @@ import { NgOptimizedImage } from '@angular/common';
         <nav class="nav">
           <div class="logo">
             <svg
-              class="w-6 h-6 text-gray-800 dark:text-white"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="34"
@@ -58,9 +57,8 @@ import { NgOptimizedImage } from '@angular/common';
                 >
               </li>
             </ul>
-            <button class=" btn login_btn">
+            <button class="btn login_btn">
               <svg
-                class="w-6 h-6 text-gray-800 dark:text-white"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -74,13 +72,13 @@ import { NgOptimizedImage } from '@angular/common';
                   clip-rule="evenodd"
                 />
               </svg>
-              Account
+              <span class="login_label">Account</span>
             </button>
           </div>
         </nav>
       </header>
 
-      <main>
+      <main class="main">
         <router-outlet></router-outlet>
       </main>
 
@@ -90,55 +88,68 @@ import { NgOptimizedImage } from '@angular/common';
     </div>
   `,
   styles: `
-    .container {
+    .app_container {
       display: flex;
-      width: 100%;
+      flex-direction: column;
       min-height: 100vh;
     }
 
-    .container > div:first-child {
-      width: 10%;
-      flex-shrink: 0;
-    }
-
-    .header, .footer {
+    .header,
+    .footer {
       background-color: var(--header_footer_color);
       text-align: center;
-      padding: 0.5rem 2rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .main {
+      flex: 1;
+      padding: 1rem;
     }
 
     .nav {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap; /* help on very narrow screens */
     }
 
     .logo {
       display: flex;
       flex-direction: row;
       align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: var(--dark_blue);
     }
 
     .logo svg {
       color: var(--dark_blue);
-    }
-
-    .navbar_list {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
+      flex-shrink: 0;
     }
 
     .navbar_links {
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: 2rem;
+      gap: 1.5rem;
+    }
+
+    .navbar_list {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .navbar_link {
       text-decoration: none;
       color: var(--medium_blue);
       transition: color 0.3s ease-in-out;
+      font-size: 0.95rem;
     }
 
     .navbar_link:hover {
@@ -149,6 +160,60 @@ import { NgOptimizedImage } from '@angular/common';
       background-color: var(--dark_blue);
       color: var(--bg_color);
       border: none;
+      padding: 0.4rem 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .login_btn svg {
+      color: var(--bg_color);
+    }
+
+    .footer_text {
+      font-size: 0.8rem;
+      margin: 0.25rem 0;
+    }
+
+    /* ---------- Mobile styles ---------- */
+    @media (max-width: 768px) {
+      .header {
+        padding: 0.5rem 0.75rem;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navbar_links {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .navbar_list {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .navbar_link {
+        font-size: 0.95rem;
+      }
+
+      .login_btn {
+        align-self: stretch;
+        justify-content: center;
+      }
+
+      .main {
+        padding: 0.75rem;
+      }
     }
   `,
 })

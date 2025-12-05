@@ -76,6 +76,13 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     a:hover {
       text-decoration: underline;
     }
+
+      /* Hide sidebar on mobile */
+  @media (max-width: 768px) {
+    .aside-nav {
+      display: none;
+    }
+  }
   `,
 })
 export class AsideNavbarComponent {}
