@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TaskService } from '../tasks.service';
 import { AddTaskDTO } from '../task';
+import { Project } from '../../projects/project';
+import { ProjectService } from '../../projects/projects.service';
 
 @Component({
   selector: 'app-task-add',
@@ -12,18 +19,32 @@ import { AddTaskDTO } from '../task';
   template: `
     <div class="task-add-page">
       <h1 class="task-add-page_title">Add New Task</h1>
-      <h4 class="task-add-page_subtitle">Fill in the details to create a new task</h4>
+      <h4 class="task-add-page_subtitle">
+        Fill in the details to create a new task
+      </h4>
 
       <div class="add-task-page_card">
         <form [formGroup]="taskForm" class="add-task-page_form">
-
           <!-- Title -->
           <div class="add-task-page_form-group">
-            <label for="title" class="task-add-page_form-label">Task Name</label>
-            <input type="text" id="title" class="task-add-page_form-control" formControlName="title">
+            <label for="title" class="task-add-page_form-label"
+              >Task Name</label
+            >
+            <input
+              type="text"
+              id="title"
+              class="task-add-page_form-control"
+              formControlName="title"
+            />
 
-            <div class="error-message" style="color: #7c0505;"
-                 *ngIf="taskForm.controls['title'].invalid && taskForm.controls['title'].touched">
+            <div
+              class="error-message"
+              style="color: #7c0505;"
+              *ngIf="
+                taskForm.controls['title'].invalid &&
+                taskForm.controls['title'].touched
+              "
+            >
               <small *ngIf="taskForm.controls['title'].errors?.['required']">
                 Task name is required.
               </small>
@@ -38,14 +59,28 @@ import { AddTaskDTO } from '../task';
 
           <!-- Description -->
           <div class="task-add-page_form-group">
-            <label for="description" class="task-add-page_form-label">Task Description</label>
-            <textarea id="description" rows="10" class="task-add-page_form-control"
-                      formControlName="description">
+            <label for="description" class="task-add-page_form-label"
+              >Task Description</label
+            >
+            <textarea
+              id="description"
+              rows="10"
+              class="task-add-page_form-control"
+              formControlName="description"
+            >
             </textarea>
 
-            <div class="error-message" style="color: #7c0505;"
-                 *ngIf="taskForm.controls['description'].invalid && taskForm.controls['description'].touched">
-              <small *ngIf="taskForm.controls['description'].errors?.['required']">
+            <div
+              class="error-message"
+              style="color: #7c0505;"
+              *ngIf="
+                taskForm.controls['description'].invalid &&
+                taskForm.controls['description'].touched
+              "
+            >
+              <small
+                *ngIf="taskForm.controls['description'].errors?.['required']"
+              >
                 Task description is required.
               </small>
               <small *ngIf="taskForm.controls['title'].errors?.['minlength']">
@@ -57,14 +92,24 @@ import { AddTaskDTO } from '../task';
           <!-- Status Dropdown -->
           <div class="task-add-page_form-group">
             <label for="status" class="task-add-page_form-label">Status</label>
-            <select id="status" class="task-add-page_form-control" formControlName="status">
+            <select
+              id="status"
+              class="task-add-page_form-control"
+              formControlName="status"
+            >
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
             </select>
 
-            <div class="error-message" style="color: #7c0505;"
-                 *ngIf="taskForm.controls['status'].invalid && taskForm.controls['status'].touched">
+            <div
+              class="error-message"
+              style="color: #7c0505;"
+              *ngIf="
+                taskForm.controls['status'].invalid &&
+                taskForm.controls['status'].touched
+              "
+            >
               <small *ngIf="taskForm.controls['status'].errors?.['required']">
                 Task status is required.
               </small>
@@ -73,15 +118,27 @@ import { AddTaskDTO } from '../task';
 
           <!-- Priority Dropdown -->
           <div class="task-add-page_form-group">
-            <label for="priority" class="task-add-page_form-label">Priority</label>
-            <select id="priority" class="task-add-page_form-control" formControlName="priority">
+            <label for="priority" class="task-add-page_form-label"
+              >Priority</label
+            >
+            <select
+              id="priority"
+              class="task-add-page_form-control"
+              formControlName="priority"
+            >
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
             </select>
 
-            <div class="error-message" style="color: #7c0505;"
-                 *ngIf="taskForm.controls['priority'].invalid && taskForm.controls['priority'].touched">
+            <div
+              class="error-message"
+              style="color: #7c0505;"
+              *ngIf="
+                taskForm.controls['priority'].invalid &&
+                taskForm.controls['priority'].touched
+              "
+            >
               <small *ngIf="taskForm.controls['priority'].errors?.['required']">
                 Task priority is required.
               </small>
@@ -90,11 +147,24 @@ import { AddTaskDTO } from '../task';
 
           <!-- Due Date -->
           <div class="task-add-page_form-group">
-            <label for="dueDate" class="task-add-page_form-label">Due Date</label>
-            <input type="datetime-local" id="dueDate" class="task-add-page_form-control" formControlName="dueDate">
+            <label for="dueDate" class="task-add-page_form-label"
+              >Due Date</label
+            >
+            <input
+              type="datetime-local"
+              id="dueDate"
+              class="task-add-page_form-control"
+              formControlName="dueDate"
+            />
 
-            <div class="error-message" style="color: #7c0505;"
-                 *ngIf="taskForm.controls['dueDate'].invalid && taskForm.controls['dueDate'].touched">
+            <div
+              class="error-message"
+              style="color: #7c0505;"
+              *ngIf="
+                taskForm.controls['dueDate'].invalid &&
+                taskForm.controls['dueDate'].touched
+              "
+            >
               <small *ngIf="taskForm.controls['dueDate'].errors?.['required']">
                 Task due date is required.
               </small>
@@ -102,14 +172,35 @@ import { AddTaskDTO } from '../task';
           </div>
 
           <!-- Project Dropdown -->
+          <!-- Project Dropdown -->
           <div class="task-add-page_form-group">
-            <label for="project" class="task-add-page_form-label">Select from a Project</label>
-            <select id="project" class="task-add-page_form-control" formControlName="project">
-              <option value="1">1000</option>
+            <label for="project" class="task-add-page_form-label">
+              Select from a Project
+            </label>
+
+            <select
+              id="project"
+              class="task-add-page_form-control"
+              formControlName="project"
+            >
+              <option value="">-- Select a project --</option>
+
+              <option
+                *ngFor="let project of projects"
+                [value]="project.projectId"
+              >
+                {{ project.name }} ({{ project.projectId }})
+              </option>
             </select>
 
-            <div class="error-message" style="color: #7c0505;"
-                 *ngIf="taskForm.controls['project'].invalid && taskForm.controls['project'].touched">
+            <div
+              class="error-message"
+              style="color: #7c0505;"
+              *ngIf="
+                taskForm.controls['project'].invalid &&
+                taskForm.controls['project'].touched
+              "
+            >
               <small *ngIf="taskForm.controls['project'].errors?.['required']">
                 Task project is required.
               </small>
@@ -117,7 +208,13 @@ import { AddTaskDTO } from '../task';
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" class="btn task-add-page_btn" (click)="onSubmit()">Add Task</button>
+          <button
+            type="submit"
+            class="btn task-add-page_btn"
+            (click)="onSubmit()"
+          >
+            Add Task
+          </button>
         </form>
       </div>
       <a class="task-add-page_link" routerLink="/tasks">Return</a>
@@ -183,47 +280,81 @@ import { AddTaskDTO } from '../task';
       text-decoration: underline;
     }
 
-  `
+  `,
 })
 export class TaskAddComponent {
-  taskForm: FormGroup = this.fb.group({
-      title: [null, Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(100)])],
-      description: [null, Validators.compose([Validators.required, Validators.maxLength(500)])],
-      status: [null, Validators.required],
-      priority: [null, Validators.required],
-      dueDate: [null, Validators.required],
-      project: [null, Validators.required],
-    }
-  );
+  projects: Project[] = [];
+  loading = true;
+  serverMessage: string | null = null;
+  serverMessageType: 'success' | 'error' | null = null;
 
-  constructor(private fb: FormBuilder, private router: Router, private taskService: TaskService) {}
+  taskForm: FormGroup = this.fb.group({
+    title: [
+      null,
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100),
+      ]),
+    ],
+    description: [
+      null,
+      Validators.compose([Validators.required, Validators.maxLength(500)]),
+    ],
+    status: [null, Validators.required],
+    priority: [null, Validators.required],
+    dueDate: [null, Validators.required],
+    project: [null, Validators.required],
+  });
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private taskService: TaskService,
+    private projectService: ProjectService
+  ) {
+    this.projectService.getProjects().subscribe({
+      next: (projects: Project[]) => {
+        this.projects = projects;
+        this.loading = false;
+        this.serverMessage = `Retrieved ${projects.length} project(s) successfully.`;
+        this.serverMessageType = 'success';
+      },
+      error: (err: any) => {
+        this.loading = false;
+        this.serverMessage = `Error retrieving projects. ${err.message}`;
+        this.serverMessageType = 'error';
+        console.error('Error occurred while retrieving projects:', err);
+      },
+    });
+  }
 
   onSubmit() {
     if (this.taskForm.valid) {
-      const dueDate = new Date(this.taskForm.controls["dueDate"].value).toISOString();
+      const dueDate = new Date(
+        this.taskForm.controls['dueDate'].value
+      ).toISOString();
 
       const newTask: AddTaskDTO = {
-        title: this.taskForm.controls["title"].value,
-        description: this.taskForm.controls["description"].value,
-        status: this.taskForm.controls["status"].value,
-        priority: this.taskForm.controls["priority"].value,
+        title: this.taskForm.controls['title'].value,
+        description: this.taskForm.controls['description'].value,
+        status: this.taskForm.controls['status'].value,
+        priority: this.taskForm.controls['priority'].value,
         dueDate: dueDate,
-
       };
 
-      console.log("Creating Task: ", newTask);
+      console.log('Creating Task: ', newTask);
       const projectId = 1000;
       this.taskService.addTask(newTask, projectId).subscribe({
-          next: (result: any) => {
-            console.log(`Task created successfully: ${result.message}`);
-            this.router.navigate(['/tasks']);
-          },
+        next: (result: any) => {
+          console.log(`Task created successfully: ${result.message}`);
+          this.router.navigate(['/tasks']);
+        },
 
-          error: (error) => {
-            console.error("Error creating task", error);
-          }
-        }
-      )
+        error: (error) => {
+          console.error('Error creating task', error);
+        },
+      });
     }
   }
 }
