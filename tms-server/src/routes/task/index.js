@@ -49,11 +49,12 @@ router.get("/search", async (req, res, next) => {
 
 // GET /task/:id - read a task by id
 router.get("/:id", async (req, res, next) => {
+  console.log("made it to router");
   try {
     const { id } = req.params;
-
+    console.log(id);
     const task = await Task.findById(id);
-
+    console.log(task);
     if (!task) {
       return res.status(404).send({ message: "Task not found" });
     }

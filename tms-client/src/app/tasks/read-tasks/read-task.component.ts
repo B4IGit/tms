@@ -8,20 +8,18 @@ import { Task } from '../task';
   selector: 'app-read-task',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './read-task.component.html'
+  templateUrl: './read-task.component.html',
 })
 export class ReadTaskComponent implements OnInit {
   task?: Task;
   loading = false;
   error?: string;
 
-  constructor(
-    private route: ActivatedRoute,
-    private tasks: TaskService
-  ) {}
+  constructor(private route: ActivatedRoute, private tasks: TaskService) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = '650c1f1e1c9d440000a1b1c1';
+    // const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
       this.error = 'Missing task id.';
       return;
@@ -29,8 +27,14 @@ export class ReadTaskComponent implements OnInit {
 
     this.loading = true;
     this.tasks.getTaskById(id).subscribe({
-      next: (t: Task) => { this.task = t; this.loading = false; },
-      error: () => { this.error = 'Unable to load task.'; this.loading = false; }
+      next: (t: Task) => {
+        this.task = t;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Unable to load task.';
+        this.loading = false;
+      },
     });
   }
 }

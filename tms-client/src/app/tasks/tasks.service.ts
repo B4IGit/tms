@@ -14,7 +14,8 @@ export class TaskService {
   }
 
   getTaskById(id: string): Observable<Task> {
-    return this.http.get<Task>(`/${environment.apiBaseUrl}api/tasks/${id}`);
+    console.log(`${environment.apiBaseUrl}api/tasks/${id}`);
+    return this.http.get<Task>(`${environment.apiBaseUrl}/api/tasks/${id}`);
   }
 
   addTask(task: AddTaskDTO, projectId: number = 1000) {

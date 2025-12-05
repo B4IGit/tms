@@ -39,7 +39,7 @@ import { NgOptimizedImage } from '@angular/common';
                 <a class="navbar_link" routerLink="/">Home</a>
               </li>
               <li class="nav_item">
-                <a class="navbar_link" routerLink="/task-list">Show Tasks</a>
+                <a class="navbar_link" routerLink="/task-list">All Tasks</a>
               </li>
               <li class="nav_item">
                 <a class="navbar_link" routerLink="/tasks/search"
@@ -50,7 +50,9 @@ import { NgOptimizedImage } from '@angular/common';
                 <a class="navbar_link" routerLink="tasks/read">Read Task</a>
               </li>
               <li class="nav_item">
-                <a class="navbar_link" routerLink="/projects">Projects</a>
+                <a class="navbar_link" routerLink="/projects/projects-list"
+                  >All Projects</a
+                >
               </li>
             </ul>
             <button class=" btn login_btn">

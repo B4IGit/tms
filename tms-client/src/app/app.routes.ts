@@ -4,6 +4,7 @@ import { ListTasksComponent } from './tasks/list-tasks/list-tasks.component';
 import { TaskAddComponent } from './tasks/task-add/task-add.component';
 import { TaskFindComponent } from './tasks/find-tasks/find-tasks.component';
 import { ReadTaskComponent } from './tasks/read-tasks/read-task.component';
+import { ListProjectsComponent } from './projects/list-projects/list-projects.component';
 
 // Lazy-load the MainLayout which contains the aside navigation
 const loadMainLayout = () =>
@@ -27,7 +28,10 @@ const layoutRoutes: Route = {
     { path: 'tasks/read', component: ReadTaskComponent },
 
     // Projects (placeholder children can be added later)
-    { path: 'projects', children: [] },
+    {
+      path: 'projects',
+      children: [{ path: 'projects-list', component: ListProjectsComponent }],
+    },
   ],
 };
 
