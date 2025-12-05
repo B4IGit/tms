@@ -1,20 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 import { HomeComponent } from './home.component';
-import { environment } from '../../environments/environment';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
-  let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomeComponent, HttpClientTestingModule]
-    })
-    .compileComponents();
-
-    httpTestingController = TestBed.inject(HttpTestingController);
+      imports: [
+        HttpClientTestingModule, // IMPORTANT
+        HomeComponent            // standalone
+      ],
+      providers: [
+        { provide: ActivatedRoute, useValue: { params: of({}) }}
+      ]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;

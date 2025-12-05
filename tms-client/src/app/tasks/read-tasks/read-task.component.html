@@ -1,0 +1,18 @@
+<div *ngIf="loading">Loading task…</div>
+
+<div *ngIf="error && !loading" class="error">
+  {{ error }}
+</div>
+
+<section *ngIf="task && !loading">
+  <h2>{{ task.title }}</h2>
+
+  <p *ngIf="task.description">{{ task.description }}</p>
+
+  <ul>
+    <li><strong>Status:</strong> {{ task.status }}</li>
+    <li><strong>Priority:</strong> {{ task.priority }}</li>
+    <li *ngIf="task.dueDate"><strong>Due:</strong> {{ task.dueDate | date:'mediumDate' }}</li>
+    <li *ngIf="task._id"><strong>ID:</strong> {{ task._id }}</li>
+  </ul>
+</section>
