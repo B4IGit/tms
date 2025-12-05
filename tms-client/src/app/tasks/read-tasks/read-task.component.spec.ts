@@ -10,7 +10,7 @@ describe('ReadTaskComponent', () => {
   let component: ReadTaskComponent;
 
   const routeStub = {
-    snapshot: { paramMap: { get: (_: string) => '123' } }
+    snapshot: { paramMap: { get: (_: string) => '123' } },
   };
 
   const mockTask: Task = {
@@ -19,21 +19,23 @@ describe('ReadTaskComponent', () => {
     status: 'pending',
     priority: 'low',
     dueDate: '2025-12-31',
-    description: 'Demo description'
+    description: 'Demo description',
   };
 
   let serviceStub: jasmine.SpyObj<TaskService>;
 
   beforeEach(async () => {
-    serviceStub = jasmine.createSpyObj<TaskService>('TaskService', ['getTaskById']);
+    serviceStub = jasmine.createSpyObj<TaskService>('TaskService', [
+      'getTaskById',
+    ]);
     serviceStub.getTaskById.and.returnValue(of(mockTask));
 
     await TestBed.configureTestingModule({
       imports: [ReadTaskComponent],
       providers: [
         { provide: ActivatedRoute, useValue: routeStub },
-        { provide: TaskService, useValue: serviceStub }
-      ]
+        { provide: TaskService, useValue: serviceStub },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ReadTaskComponent);
@@ -47,7 +49,9 @@ describe('ReadTaskComponent', () => {
 
   it('should call service with id from route and render title', () => {
     fixture.detectChanges(); // triggers ngOnInit
-    expect(serviceStub.getTaskById).toHaveBeenCalledOnceWith('123');
+    expect(serviceStub.getTaskById).toHaveBeenCalledOnceWith(
+      '650c1f1e1c9d440000a1b1c1'
+    );
 
     fixture.detectChanges();
     const compiled: HTMLElement = fixture.nativeElement;
@@ -55,7 +59,9 @@ describe('ReadTaskComponent', () => {
   });
 
   it('should show error message when service fails', () => {
-    serviceStub.getTaskById.and.returnValue(throwError(() => new Error('boom')));
+    serviceStub.getTaskById.and.returnValue(
+      throwError(() => new Error('boom'))
+    );
     fixture.detectChanges();
 
     expect(component.error).toBeDefined();

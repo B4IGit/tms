@@ -47,6 +47,9 @@ import { NgOptimizedImage } from '@angular/common';
                 >
               </li>
               <li class="nav_item">
+                <a class="navbar_link" routerLink="/tasks/add">Add Task</a>
+              </li>
+              <li class="nav_item">
                 <a class="navbar_link" routerLink="tasks/read">Read Task</a>
               </li>
               <li class="nav_item">
