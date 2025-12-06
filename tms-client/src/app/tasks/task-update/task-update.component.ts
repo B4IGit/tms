@@ -1,0 +1,248 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { TaskService } from '../tasks.service';
+import { AddTaskDTO, Task } from '../task';
+
+@Component({
+  selector: 'app-task-update',
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  template: `
+    <div class="task-update-page">
+      <h1 class="task-update-page_title">Update Task</h1>
+      <h4 class="task-update-page_subtitle">
+        Select a task to update, then modify its values
+      </h4>
+
+      <div class="update-task-page_card">
+        <form [formGroup]="taskForm" class="update-task-page_form" (ngSubmit)="onSubmit()">
+          <!-- Task selector (dropdown) -->
+          <div class="update-task-page_form-group">
+            <label for="taskId" class="task-update-page_form-label">Select Task</label>
+            <select
+              id="taskId"
+              class="task-update-page_form-control"
+              formControlName="taskId"
+              [disabled]="loadingTasks || tasks.length === 0"
+            >
+              <option value="">
+                {{ loadingTasks ? 'Loading tasks…' : '-- Select a task --' }}
+              </option>
+              <option *ngFor="let t of tasks" [value]="t._id">
+                {{ t.title }}
+              </option>
+            </select>
+            <div class="error-message" style="color: #7c0505;" *ngIf="taskForm.controls['taskId'].invalid && taskForm.controls['taskId'].touched">
+              <small *ngIf="taskForm.controls['taskId'].errors?.['required']">
+                Please select a task to update.
+              </small>
+            </div>
+          </div>
+
+          <!-- Title -->
+          <div class="update-task-page_form-group">
+            <label for="title" class="task-update-page_form-label">Task Name</label>
+            <input type="text" id="title" class="task-update-page_form-control" formControlName="title" />
+
+            <div class="error-message" style="color: #7c0505;" *ngIf="taskForm.controls['title'].invalid && taskForm.controls['title'].touched">
+              <small *ngIf="taskForm.controls['title'].errors?.['required']">Task name is required.</small>
+              <small *ngIf="taskForm.controls['title'].errors?.['minlength']">Task name must be at least 3 characters long.</small>
+              <small *ngIf="taskForm.controls['title'].errors?.['maxlength']">Task name cannot exceed 100 characters.</small>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="task-update-page_form-group">
+            <label for="description" class="task-update-page_form-label">Task Description</label>
+            <textarea id="description" rows="10" class="task-update-page_form-control" formControlName="description"></textarea>
+            <div class="error-message" style="color: #7c0505;" *ngIf="taskForm.controls['description'].invalid && taskForm.controls['description'].touched">
+              <small *ngIf="taskForm.controls['description'].errors?.['maxlength']">
+                Task description cannot exceed more than 500 characters.
+              </small>
+            </div>
+          </div>
+
+          <!-- Status Dropdown -->
+          <div class="task-update-page_form-group">
+            <label for="status" class="task-update-page_form-label">Status</label>
+            <select id="status" class="task-update-page_form-control" formControlName="status">
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+            <div class="error-message" style="color: #7c0505;" *ngIf="taskForm.controls['status'].invalid && taskForm.controls['status'].touched">
+              <small>Status is required.</small>
+            </div>
+          </div>
+
+          <!-- Priority Dropdown -->
+          <div class="task-update-page_form-group">
+            <label for="priority" class="task-update-page_form-label">Priority</label>
+            <select id="priority" class="task-update-page_form-control" formControlName="priority">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+            <div class="error-message" style="color: #7c0505;" *ngIf="taskForm.controls['priority'].invalid && taskForm.controls['priority'].touched">
+              <small>Priority is required.</small>
+            </div>
+          </div>
+
+          <!-- Due Date -->
+          <div class="task-update-page_form-group">
+            <label for="dueDate" class="task-update-page_form-label">Due Date</label>
+            <input type="datetime-local" id="dueDate" class="task-update-page_form-control" formControlName="dueDate" />
+          </div>
+
+          <!-- Submit Button -->
+          <button class="btn task-update-page_btn" [disabled]="taskForm.invalid" type="submit">Update Task</button>
+
+          <a class="task-update-page_link" routerLink="/tasks">Return</a>
+        </form>
+      </div>
+    </div>
+  `,
+  styles: `
+
+  `
+})
+export class TaskUpdateComponent implements OnInit {
+  loadingTasks = false;
+  tasks: Task[] = [];
+
+  taskForm: FormGroup = this.fb.group({
+    taskId: [null, Validators.required],
+    title: [
+      null,
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100),
+      ]),
+    ],
+    description: [null, Validators.maxLength(500)],
+    status: [null, Validators.required],
+    priority: [null, Validators.required],
+    dueDate: [null],
+  });
+
+  constructor(private fb: FormBuilder, private router: Router, private taskService: TaskService) {}
+
+  ngOnInit(): void {
+    // Load tasks for dropdown
+    this.loadingTasks = true;
+    this.taskService.getTasks().subscribe({
+      next: (tasks) => {
+        // Sort tasks alphabetically by title for easier selection
+        this.tasks = [...tasks].sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        this.loadingTasks = false;
+      },
+      error: (err) => {
+        this.loadingTasks = false;
+      },
+    });
+
+    // When a task is selected, fetch its latest data and prefill the form
+    this.taskForm.get('taskId')!.valueChanges.subscribe((id: string | null) => {
+      if (!id) {
+        // No task selected: clear and disable form fields
+        this.taskForm.patchValue({
+          title: null,
+          description: null,
+          status: null,
+          priority: null,
+          dueDate: null,
+        });
+        this.setEditControlsEnabled(false);
+        return;
+      }
+      this.taskService.getTaskById(id).subscribe({
+        next: (task) => {
+          this.patchFormFromTask(task);
+          this.setEditControlsEnabled(true);
+        },
+        error: (err) => {
+          this.setEditControlsEnabled(false);
+        },
+      });
+    });
+
+    // Initially disable edit controls until a task is selected
+    this.setEditControlsEnabled(false);
+  }
+
+  private patchFormFromTask(task: Task) {
+    this.taskForm.patchValue({
+      title: task.title ?? null,
+      description: task.description ?? null,
+      status: task.status ?? null,
+      priority: task.priority ?? null,
+      dueDate: task.dueDate ? this.toLocalDateTimeInput(task.dueDate) : null,
+    });
+  }
+
+  // Converts ISO string (UTC) to yyyy-MM-ddTHH:mm for datetime-local input
+  private toLocalDateTimeInput(iso: string): string {
+    try {
+      const d = new Date(iso);
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      const yyyy = d.getFullYear();
+      const mm = pad(d.getMonth() + 1);
+      const dd = pad(d.getDate());
+      const hh = pad(d.getHours());
+      const min = pad(d.getMinutes());
+      return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+    } catch {
+      return '';
+    }
+  }
+
+  private setEditControlsEnabled(enabled: boolean) {
+    const controls = ['title', 'description', 'status', 'priority', 'dueDate'];
+    controls.forEach((name) => {
+      const control = this.taskForm.get(name);
+      if (!control) return;
+      if (enabled) {
+        control.enable({ emitEvent: false });
+      } else {
+        control.disable({ emitEvent: false });
+      }
+    });
+  }
+
+  onSubmit() {
+    if (this.taskForm.invalid) return;
+
+    const id = this.taskForm.controls['taskId'].value as string;
+
+    const updateTask: AddTaskDTO = {
+      title: this.taskForm.controls['title'].value,
+      description: this.taskForm.controls['description'].value ?? undefined,
+      status: this.taskForm.controls['status'].value,
+      priority: this.taskForm.controls['priority'].value,
+      dueDate: this.taskForm.controls['dueDate'].value
+        ? new Date(this.taskForm.controls['dueDate'].value).toISOString()
+        : undefined,
+
+    };
+
+    console.log('Updating Task: ', updateTask);
+    this.taskService.updateTask(id, updateTask).subscribe({
+      next: (result: any) => {
+        console.log(`Task created successfully: ${result.message}`);
+        this.router.navigate(['/tasks']);
+      },
+
+      error: (error) => {
+        console.error('Error creating task', error);
+      },
+    });
+  }
+}
