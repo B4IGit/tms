@@ -24,6 +24,14 @@ export class TaskService {
     );
   }
 
+  // PATCH update an existing task
+  updateTask(id: string, update: AddTaskDTO): Observable<{ message: string; id: string } | Task> {
+    return this.http.patch<{ message: string; id: string } | Task>(
+      `${environment.apiBaseUrl}/api/tasks/${id}`,
+      update
+    );
+  }
+
   findTask(term: string): Observable<Task[]> {
     const params = new HttpParams().set('term', term);
     return this.http.get<Task[]>(`${environment.apiBaseUrl}/api/tasks/search`, {
