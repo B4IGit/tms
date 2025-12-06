@@ -172,7 +172,6 @@ import { ProjectService } from '../../projects/projects.service';
           </div>
 
           <!-- Project Dropdown -->
-          <!-- Project Dropdown -->
           <div class="task-add-page_form-group">
             <label for="project" class="task-add-page_form-label">
               Select from a Project
