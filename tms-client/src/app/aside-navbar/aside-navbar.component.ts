@@ -22,6 +22,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
           <a routerLink="/tasks/add" routerLinkActive="active">Add Task</a>
         </li>
         <li>
+          <a routerLink="/tasks/update">Update Task</a>
+        </li>
+        <li>
           <a routerLink="/tasks/search" routerLinkActive="active">Find Task</a>
         </li>
         <li>
