@@ -3,11 +3,13 @@ const Ajv = require("ajv");
 const createError = require("http-errors");
 const { Task } = require("../../models/task");
 const { addTaskSchema } = require("../../schemas");
+const { updateTaskSchema } = require("../../schemas");
 const router = express.Router();
 
 const ajv = new Ajv();
 
 const validateAddTask = ajv.compile(addTaskSchema);
+const validateUpdateTask = ajv.compile(updateTaskSchema);
 
 // GET return all tasks
 router.get("/", async (req, res, next) => {
@@ -91,5 +93,34 @@ router.post("/:projectId", async (req, res, next) => {
     next(err);
   }
 });
+
+// PATCH request to update a task document in the task's collection
+router.patch("/:id", async (req, res, next) => {
+    try {
+        const taskId = req.params.id;
+        const task = await Task.findOne({ _id: taskId });
+
+        const valid = validateUpdateTask(req.body);
+
+        if (!task) {
+            return next(createError(404, `Task with ID ${taskId} not found`));
+        }
+
+        if (!valid) {
+            return next(createError(400, ajv.errorsText(validateUpdateTask.errors)));
+        }
+
+        task.set(req.body);
+        await task.save();
+
+        res.send({
+            message: "Task updated successfully",
+            id: task._id
+        })
+    } catch (err) {
+        console.error(`Error while updating task: ${err}`);
+        next(err);
+    }
+})
 
 module.exports = router;
