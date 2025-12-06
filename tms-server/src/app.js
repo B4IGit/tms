@@ -45,12 +45,16 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); // This allows all origins
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
   ); // Allowed request methods
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   ); // Allowed headers
+  // Handle preflight requests quickly
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
   next();
 });
 
