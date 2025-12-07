@@ -15,16 +15,16 @@ import { AddTaskDTO, Task } from '../task';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
   template: `
-    <div class="task-update-page">
-      <h1 class="task-update-page_title">Update Task</h1>
-      <h4 class="task-update-page_subtitle">
-        Select a task to update, then modify its values
+    <div class="task-update_container">
+      <h1 class="task-update_title">Update Task</h1>
+      <h4 class="task-update_subtitle">
+        Select a task to update or make changes to.
       </h4>
 
-      <div class="update-task-page_card">
-        <form [formGroup]="taskForm" class="update-task-page_form" (ngSubmit)="onSubmit()">
+      <div class="update-task_form-container">
+        <form [formGroup]="taskForm" class="update-task_form" (ngSubmit)="onSubmit()">
           <!-- Task selector (dropdown) -->
-          <div class="update-task-page_form-group">
+          <div class="update-task_form-group">
             <label for="taskId" class="task-update-page_form-label">Select Task</label>
             <select
               id="taskId"
@@ -47,9 +47,9 @@ import { AddTaskDTO, Task } from '../task';
           </div>
 
           <!-- Title -->
-          <div class="update-task-page_form-group">
-            <label for="title" class="task-update-page_form-label">Task Name</label>
-            <input type="text" id="title" class="task-update-page_form-control" formControlName="title" />
+          <div class="update-task_form-group">
+            <label for="title" class="task-update_form-label">Task Name</label>
+            <input type="text" id="title" class="task-update_form-control" formControlName="title" />
 
             <div class="error-message" style="color: #7c0505;" *ngIf="taskForm.controls['title'].invalid && taskForm.controls['title'].touched">
               <small *ngIf="taskForm.controls['title'].errors?.['required']">Task name is required.</small>
@@ -59,9 +59,9 @@ import { AddTaskDTO, Task } from '../task';
           </div>
 
           <!-- Description -->
-          <div class="task-update-page_form-group">
-            <label for="description" class="task-update-page_form-label">Task Description</label>
-            <textarea id="description" rows="10" class="task-update-page_form-control" formControlName="description"></textarea>
+          <div class="task-update_form-group">
+            <label for="description" class="task-update_form-label">Task Description</label>
+            <textarea id="description" rows="10" class="task-update_form-control" formControlName="description"></textarea>
             <div class="error-message" style="color: #7c0505;" *ngIf="taskForm.controls['description'].invalid && taskForm.controls['description'].touched">
               <small *ngIf="taskForm.controls['description'].errors?.['maxlength']">
                 Task description cannot exceed more than 500 characters.
@@ -70,9 +70,9 @@ import { AddTaskDTO, Task } from '../task';
           </div>
 
           <!-- Status Dropdown -->
-          <div class="task-update-page_form-group">
-            <label for="status" class="task-update-page_form-label">Status</label>
-            <select id="status" class="task-update-page_form-control" formControlName="status">
+          <div class="task-update_form-group">
+            <label for="status" class="task-update_form-label">Status</label>
+            <select id="status" class="task-update_form-control" formControlName="status">
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
@@ -83,9 +83,9 @@ import { AddTaskDTO, Task } from '../task';
           </div>
 
           <!-- Priority Dropdown -->
-          <div class="task-update-page_form-group">
-            <label for="priority" class="task-update-page_form-label">Priority</label>
-            <select id="priority" class="task-update-page_form-control" formControlName="priority">
+          <div class="task-update_form-group">
+            <label for="priority" class="task-update_form-label">Priority</label>
+            <select id="priority" class="task-update_form-control" formControlName="priority">
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
@@ -96,21 +96,123 @@ import { AddTaskDTO, Task } from '../task';
           </div>
 
           <!-- Due Date -->
-          <div class="task-update-page_form-group">
-            <label for="dueDate" class="task-update-page_form-label">Due Date</label>
-            <input type="datetime-local" id="dueDate" class="task-update-page_form-control" formControlName="dueDate" />
+          <div class="task-update_form-group">
+            <label for="dueDate" class="task-update_form-label">Due Date</label>
+            <input type="datetime-local" id="dueDate" class="task-update_form-control" formControlName="dueDate" />
           </div>
 
           <!-- Submit Button -->
-          <button class="btn task-update-page_btn" [disabled]="taskForm.invalid" type="submit">Update Task</button>
+          <button class="btn task-update_btn" [disabled]="taskForm.invalid" type="submit">Update Task</button>
 
-          <a class="task-update-page_link" routerLink="/tasks">Return</a>
+          <a class="task-update_link" routerLink="/tasks">Return</a>
         </form>
       </div>
     </div>
   `,
   styles: `
+    .task-update_title {
+      text-align: center;
+      color: var(--dark_blue);
+      margin-bottom: 0.25rem;
+    }
 
+    .task-update_subtitle {
+      text-align: center;
+      color: var(--medium_blue);
+      font-size: 0.9rem;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Card container for the form */
+    .update-task_form-container {
+      width: 60%;
+      margin: 0 auto;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+      padding: 1.5rem;
+    }
+
+    /* Form layout */
+    .update-task_form {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .update-task_form-group,
+    .task-update_form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Labels */
+    .task-update-page_form-label,
+    .task-update_form-label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--medium_blue);
+    }
+
+    /* Form controls (input, select, textarea) */
+    .task-update-page_form-control,
+    .task-update_form-control {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--light_blue);
+      border-radius: 0.25rem;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease-in-out;
+    }
+
+    .task-update-page_form-control:focus,
+    .task-update_form-control:focus {
+      outline: none;
+      border-color: var(--dark_blue);
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .task-update-page_form-control:disabled {
+      background-color: #e9ecef;
+      cursor: not-allowed;
+    }
+
+    .error-message small {
+      display: block;
+      margin-top: 0.25rem;
+      font-size: 0.875rem;
+      color: #7c0505;
+    }
+
+    /* Submit Button */
+    .btn.task-update_btn {
+      border: 2px solid var(--dark_blue);
+      background-color: #F0F0F0;
+      color: var(--dark_blue);
+
+    }
+
+    .btn.task-update_btn:hover {
+      background-color: var(--dark_blue);
+      color: var(--bg_color);
+    }
+
+    .btn.task-update_btn:disabled {
+      display: none;
+    }
+
+    /* Return Link */
+    .task-update_link {
+      display: block;
+      margin-top: 1rem;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .task-update_link:hover {
+      text-decoration: underline;
+    }
   `
 })
 export class TaskUpdateComponent implements OnInit {
@@ -212,7 +314,7 @@ export class TaskUpdateComponent implements OnInit {
       if (enabled) {
         control.enable({ emitEvent: false });
       } else {
-        control.disable({ emitEvent: false });
+        control.disable({ emitEvent: true });
       }
     });
   }
