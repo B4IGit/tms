@@ -47,21 +47,33 @@ describe('ReadTaskComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call service with id from route and render title', () => {
-    fixture.detectChanges(); // triggers ngOnInit
-    expect(serviceStub.getTaskById).toHaveBeenCalledOnceWith(
-      '650c1f1e1c9d440000a1b1c1'
-    );
+  it('should call service when a task id is selected and render title', () => {
+    const select: HTMLSelectElement =
+      fixture.nativeElement.querySelector('#taskSelect');
 
+    const selectedId = select.options[1].value; // "650c1f1e1c9d440000a1b1c1"
+    select.value = selectedId;
+    select.dispatchEvent(new Event('change'));
     fixture.detectChanges();
+
+    expect(serviceStub.getTaskById).toHaveBeenCalledTimes(1);
+    expect(serviceStub.getTaskById).toHaveBeenCalledWith(selectedId);
+
     const compiled: HTMLElement = fixture.nativeElement;
     expect(compiled.querySelector('h2')?.textContent).toContain('Test Task');
   });
 
-  it('should show error message when service fails', () => {
+  it('should show error message when service fails after selection', () => {
     serviceStub.getTaskById.and.returnValue(
       throwError(() => new Error('boom'))
     );
+
+    const select: HTMLSelectElement =
+      fixture.nativeElement.querySelector('#taskSelect');
+
+    const selectedId = select.options[1].value;
+    select.value = selectedId;
+    select.dispatchEvent(new Event('change'));
     fixture.detectChanges();
 
     expect(component.error).toBeDefined();
