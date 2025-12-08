@@ -30,7 +30,6 @@ import { AddTaskDTO, Task } from '../task';
               id="taskId"
               class="task-update-page_form-control"
               formControlName="taskId"
-              [disabled]="loadingTasks || tasks.length === 0"
             >
               <option value="">
                 {{ loadingTasks ? 'Loading tasks…' : '-- Select a task --' }}
@@ -102,7 +101,12 @@ import { AddTaskDTO, Task } from '../task';
           </div>
 
           <!-- Submit Button -->
-          <button class="btn task-update_btn" [disabled]="taskForm.invalid" type="submit">Update Task</button>
+          <button class="btn task-update_btn"
+                  type="submit"
+                  *ngIf="taskForm.get('taskId')?.value"
+          >
+            Update Task
+          </button>
 
           <a class="task-update_link" routerLink="/tasks">Return</a>
         </form>
@@ -220,20 +224,15 @@ export class TaskUpdateComponent implements OnInit {
   tasks: Task[] = [];
 
   taskForm: FormGroup = this.fb.group({
-    taskId: [null, Validators.required],
-    title: [
-      null,
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(100),
-      ]),
-    ],
-    description: [null, Validators.maxLength(500)],
-    status: [null, Validators.required],
-    priority: [null, Validators.required],
-    dueDate: [null],
+    taskId: [{ value: null, disabled: true }, Validators.required],
+    title: [{ value: null, disabled: true }, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+    description: [{ value: null, disabled: true }, Validators.maxLength(500)],
+    status: [{ value: null, disabled: true }, Validators.required],
+    priority: [{ value: null, disabled: true }, Validators.required],
+    dueDate: [{ value: null, disabled: true }],
+    submitBtn: [{ value: null, disabled: true }]
   });
+
 
   constructor(private fb: FormBuilder, private router: Router, private taskService: TaskService) {}
 
@@ -245,6 +244,7 @@ export class TaskUpdateComponent implements OnInit {
         // Sort tasks alphabetically by title for easier selection
         this.tasks = [...tasks].sort((a, b) => (a.title || '').localeCompare(b.title || ''));
         this.loadingTasks = false;
+        this.taskForm.get('taskId')?.enable();
       },
       error: (err) => {
         this.loadingTasks = false;
@@ -306,7 +306,7 @@ export class TaskUpdateComponent implements OnInit {
     }
   }
 
-  private setEditControlsEnabled(enabled: boolean) {
+  setEditControlsEnabled(enabled: boolean) {
     const controls = ['title', 'description', 'status', 'priority', 'dueDate'];
     controls.forEach((name) => {
       const control = this.taskForm.get(name);
