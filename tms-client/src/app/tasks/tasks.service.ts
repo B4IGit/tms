@@ -25,13 +25,21 @@ export class TaskService {
   }
 
   // PATCH update an existing task
-  updateTask(id: string, update: AddTaskDTO): Observable<{ message: string; id: string } | Task> {
+  updateTask(
+    id: string,
+    update: AddTaskDTO
+  ): Observable<{ message: string; id: string } | Task> {
     return this.http.patch<{ message: string; id: string } | Task>(
       `${environment.apiBaseUrl}/api/tasks/${id}`,
       update
     );
   }
-deleteTask(id: string){} 
+
+  deleteTask(taskId: string): Observable<{ message: string; taskId: string }> {
+    return this.http.delete<{ message: string; taskId: string }>(
+      `${environment.apiBaseUrl}/api/tasks/${taskId}`
+    );
+  }
 
   findTask(term: string): Observable<Task[]> {
     const params = new HttpParams().set('term', term);

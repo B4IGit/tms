@@ -1,43 +1,93 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Task } from '../task';
+import { TaskService } from '../tasks.service';
 
 @Component({
   selector: 'app-delete-task',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="delete-task">
-      <h3>Are you sure you want to delete this task?</h3>
+    <div class="task-container">
+      <!-- Dropdown -->
+      <label class="header" for="taskSelect">
+        <strong>Select Task ID to delete:</strong>
+      </label>
 
-      <p><strong>Title:</strong> {{ taskTitle }}</p>
+      <select id="taskSelect" (change)="onSelectId($event)">
+        <option value="">-- Select an ID --</option>
+        <option value="650c1f1e1c9d440000a1b1c1">
+          650c1f1e1c9d440000a1b1c1
+        </option>
+      </select>
 
-      <button class="task_btn delete" (click)="deleteTask()">
-        Delete Task
-      </button>
+      <!-- Loading -->
+      <div *ngIf="loading">Deleting task…</div>
+
+      <!-- Error Message -->
+      <div *ngIf="error && !loading" class="error">
+        {{ error }}
+      </div>
+
+      <!-- Success Message -->
+      <div *ngIf="successMessage && !loading" class="success">
+        {{ successMessage }}
+      </div>
     </div>
   `,
   styles: [
     `
-      .delete-task {
+      .header {
+        margin: 15px;
+      }
+      .task-container {
         padding: 1rem;
       }
-      .task_btn.delete {
-        background-color: #b83232;
-        color: white;
-        padding: 0.5rem 1rem;
-        border: none;
-        cursor: pointer;
+      .error {
+        color: red;
+        margin-top: 1rem;
+      }
+      .success {
+        color: green;
+        margin-top: 1rem;
       }
     `,
   ],
 })
 export class DeleteTaskComponent {
-  @Input() taskId!: string;
-  @Input() taskTitle!: string;
+  loading = false;
+  error?: string;
+  successMessage?: string;
 
-  @Output() deleted = new EventEmitter<string>();
+  constructor(private tasks: TaskService) {}
 
-  deleteTask() {
-    this.deleted.emit(this.taskId);
+  onSelectId(event: Event) {
+    const id = (event.target as HTMLSelectElement).value;
+
+    // Reset messages
+    this.error = undefined;
+    this.successMessage = undefined;
+
+    if (!id) {
+      this.error = 'Please select a valid task ID.';
+      return;
+    }
+
+    this.deleteTask(id);
+  }
+
+  deleteTask(id: string) {
+    this.loading = true;
+
+    this.tasks.deleteTask(id).subscribe({
+      next: (res) => {
+        this.loading = false;
+        this.successMessage = res.message; // <- show backend message
+      },
+      error: () => {
+        this.loading = false;
+        this.error = 'Unable to delete task.';
+      },
+    });
   }
 }

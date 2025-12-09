@@ -124,77 +124,106 @@ describe("Task API", () => {
   });
 
   describe("PATCH /api/tasks/:id", () => {
-      it("should update a plant successfully", async () => {
-          const mockTask = {
-              _id: "650c1f1e1c9d440000a1b1c1",
-              title: "Complete project documentation",
-              description: "Write the documentation for the project",
-              status: "In Progress",
-              priority: "High",
-              dueDate: "2021-01-10T00:00:00.000Z",
-              set: jest.fn(),
-              save: jest.fn().mockResolvedValue(true)
-          }
+    it("should update a task successfully", async () => {
+      const mockTask = {
+        _id: "650c1f1e1c9d440000a1b1c1",
+        title: "Complete project documentation",
+        description: "Write the documentation for the project",
+        status: "In Progress",
+        priority: "High",
+        dueDate: "2021-01-10T00:00:00.000Z",
+        set: jest.fn(),
+        save: jest.fn().mockResolvedValue(true),
+      };
 
-          Task.findOne.mockResolvedValue(mockTask);
+      Task.findOne.mockResolvedValue(mockTask);
 
-          const response = await request(app).patch("/api/tasks/650c1f1e1c9d440000a1b1c1").send({
-              title: "Complete project documentation",
-              description: "Write the documentation for the project",
-              status: "In Progress",
-              priority: "High",
-              dueDate: "2021-01-10T00:00:00.000Z",
-          });
+      const response = await request(app)
+        .patch("/api/tasks/650c1f1e1c9d440000a1b1c1")
+        .send({
+          title: "Complete project documentation",
+          description: "Write the documentation for the project",
+          status: "In Progress",
+          priority: "High",
+          dueDate: "2021-01-10T00:00:00.000Z",
+        });
 
-          expect(response.status).toBe(200);
-          expect(response.body.message).toBe("Task updated successfully");
-      });
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe("Task updated successfully");
+    });
 
-      it ("should return validation error for invalid type", async () => {
-          const mockTask = {
-              _id: "650c1f1e1c9d440000a1b1c1",
-              title: "Complete project documentation",
-              description: "Write the documentation for the project",
-              status: "In Progress",
-              priority: "High",
-              dueDate: "2021-01-10T00:00:00.000Z",
-              set: jest.fn(),
-              save: jest.fn().mockResolvedValue(true)
-          }
+    it("should return validation error for invalid type", async () => {
+      const mockTask = {
+        _id: "650c1f1e1c9d440000a1b1c1",
+        title: "Complete project documentation",
+        description: "Write the documentation for the project",
+        status: "In Progress",
+        priority: "High",
+        dueDate: "2021-01-10T00:00:00.000Z",
+        set: jest.fn(),
+        save: jest.fn().mockResolvedValue(true),
+      };
 
-          Task.findOne.mockResolvedValue(mockTask);
+      Task.findOne.mockResolvedValue(mockTask);
 
-          const response = await request(app).patch("/api/tasks/1").send({
-              title: "T",
-              description: "Test".repeat(501),
-              status: "InvalidStatus", // Invalid: not in enum
-              priority: "InvalidPriority", // Invalid: not in enum
-              dueDate: "2021-01-10T00:00:00.000Z"
-          });
+      const response = await request(app)
+        .patch("/api/tasks/1")
+        .send({
+          title: "T",
+          description: "Test".repeat(501),
+          status: "InvalidStatus", // Invalid: not in enum
+          priority: "InvalidPriority", // Invalid: not in enum
+          dueDate: "2021-01-10T00:00:00.000Z",
+        });
 
-          expect(response.status).toBe(400);
-          const errorMessages = response.body.message;
+      expect(response.status).toBe(400);
+      const errorMessages = response.body.message;
 
-          expect(errorMessages).toContain("data/title must NOT have fewer than 3 characters");
-      })
+      expect(errorMessages).toContain(
+        "data/title must NOT have fewer than 3 characters"
+      );
+    });
 
-      it("should return 404 if task is not found", async () => {
-          const invalidTaskId = "692ca8ba8c7337c8d4931d0c";
+    it("should return 404 if task is not found", async () => {
+      const invalidTaskId = "692ca8ba8c7337c8d4931d0c";
 
-          Task.findOne.mockResolvedValue(null);
+      Task.findOne.mockResolvedValue(null);
 
-          const response = await request(app).patch(`/api/tasks/${invalidTaskId}`).send({
-              title: "Complete project documentation",
-              description: "Write the documentation for the project",
-              status: "In Progress",
-              priority: "High",
-              dueDate: "2021-01-10T00:00:00.000Z",
-              }
-          )
+      const response = await request(app)
+        .patch(`/api/tasks/${invalidTaskId}`)
+        .send({
+          title: "Complete project documentation",
+          description: "Write the documentation for the project",
+          status: "In Progress",
+          priority: "High",
+          dueDate: "2021-01-10T00:00:00.000Z",
+        });
 
-          expect(response.status).toBe(404);
-          expect(response.body.message).toBe(`Task with ID ${invalidTaskId} not found`);
-          expect(Task.findOne).toHaveBeenCalledWith({ _id: invalidTaskId });
-      })
-  })
+      expect(response.status).toBe(404);
+      expect(response.body.message).toBe(
+        `Task with ID ${invalidTaskId} not found`
+      );
+      expect(Task.findOne).toHaveBeenCalledWith({ _id: invalidTaskId });
+    });
+  });
+
+  describe("DELETE /api/tasks/:tasktId", () => {
+    it("should delete a task successfully", async () => {
+      Task.deleteOne.mockResolvedValue({ deletedCount: 1 });
+      const response = await request(app).delete(
+        "/api/tasks/507f1f77bcf86cd799439011"
+      );
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe("Task deleted successfully");
+      expect(response.body.id).toBe("507f1f77bcf86cd799439011");
+    });
+    it("should handle errors during deletion", async () => {
+      Task.deleteOne.mockRejectedValue(new Error("Database error"));
+      const response = await request(app).delete(
+        "/api/tasks/507f1f77bcf86cd799439011"
+      );
+      expect(response.status).toBe(404);
+      expect(response.body.message).toBe("Not Found");
+    });
+  });
 });

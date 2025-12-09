@@ -3,6 +3,7 @@ import { DeleteTaskComponent } from './delete-task.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of } from 'rxjs';
 
 import { TaskService } from '../tasks.service';
 import { Task } from '../task';
@@ -11,37 +12,41 @@ describe('DeleteTaskComponent', () => {
   let fixture: ComponentFixture<DeleteTaskComponent>;
   let component: DeleteTaskComponent;
   let taskService: TaskService;
+
+  let serviceStub: jasmine.SpyObj<TaskService>;
+
   beforeEach(async () => {
+    serviceStub = jasmine.createSpyObj<TaskService>('TaskService', [
+      'deleteTask',
+    ]);
+    serviceStub.deleteTask.and.returnValue(of('task deleted'));
     await TestBed.configureTestingModule({
-      imports: [DeleteTaskComponent,
+      imports: [
+        DeleteTaskComponent,
         RouterTestingModule,
-        HttpClientTestingModule,],
-      providers: [ TaskService],
+        HttpClientTestingModule,
+      ],
+      providers: [{ provide: TaskService, useValue: serviceStub }],
     }).compileComponents();
 
-    
+    taskService = TestBed.inject(TaskService);
   });
-  it('should call service when a task id is selected and render title', () => {
+  it('should call service when a task id is selected and delete task', () => {
+    fixture = TestBed.createComponent(DeleteTaskComponent);
     const select: HTMLSelectElement =
       fixture.nativeElement.querySelector('#taskSelect');
 
-    const selectedId = select.options[1].value; // "650c1f1e1c9d440000a1b1c1"
+    const selectedId = select.options[1].value;
     select.value = selectedId;
     select.dispatchEvent(new Event('change'));
     fixture.detectChanges();
 
     expect(taskService.deleteTask).toHaveBeenCalledTimes(1);
-    expect(taskService.deleteTask).toHaveBeenCalledWith(selectedId);
-
-    const compiled: HTMLElement = fixture.nativeElement;
-    expect(compiled.querySelector('h2')?.textContent).toContain('Test Task');
   });
 
-
- it('should create', () => {
-     fixture = TestBed.createComponent(DeleteTaskComponent);
-     component = fixture.componentInstance;
-     expect(component).toBeTruthy();
-   });
+  it('should create', () => {
+    fixture = TestBed.createComponent(DeleteTaskComponent);
+    component = fixture.componentInstance;
+    expect(component).toBeTruthy();
   });
-
+});

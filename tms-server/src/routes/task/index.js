@@ -51,7 +51,6 @@ router.get("/search", async (req, res, next) => {
 
 // GET /task/:id - read a task by id
 router.get("/:id", async (req, res, next) => {
-  console.log("made it to router");
   try {
     const { id } = req.params;
     console.log(id);
@@ -64,6 +63,26 @@ router.get("/:id", async (req, res, next) => {
     res.status(200).send(task);
   } catch (err) {
     next(err);
+  }
+});
+
+// DELETE /api/tasks/:id - delete a task by id
+router.delete("/:taskId", async (req, res, next) => {
+  try {
+    const { taskId } = req.params;
+
+    const result = await Task.deleteOne({ _id: taskId });
+
+    if (!result || result.deletedCount === 0) {
+      return next(createError(404, "Not Found"));
+    }
+
+    return res.status(200).send({
+      message: "Task deleted successfully",
+      taskId,
+    });
+  } catch (err) {
+    return next(createError(404, "Not Found"));
   }
 });
 
@@ -96,31 +115,31 @@ router.post("/:projectId", async (req, res, next) => {
 
 // PATCH request to update a task document in the task's collection
 router.patch("/:id", async (req, res, next) => {
-    try {
-        const taskId = req.params.id;
-        const task = await Task.findOne({ _id: taskId });
+  try {
+    const taskId = req.params.id;
+    const task = await Task.findOne({ _id: taskId });
 
-        const valid = validateUpdateTask(req.body);
+    const valid = validateUpdateTask(req.body);
 
-        if (!task) {
-            return next(createError(404, `Task with ID ${taskId} not found`));
-        }
-
-        if (!valid) {
-            return next(createError(400, ajv.errorsText(validateUpdateTask.errors)));
-        }
-
-        task.set(req.body);
-        await task.save();
-
-        res.send({
-            message: "Task updated successfully",
-            id: task._id
-        })
-    } catch (err) {
-        console.error(`Error while updating task: ${err}`);
-        next(err);
+    if (!task) {
+      return next(createError(404, `Task with ID ${taskId} not found`));
     }
-})
+
+    if (!valid) {
+      return next(createError(400, ajv.errorsText(validateUpdateTask.errors)));
+    }
+
+    task.set(req.body);
+    await task.save();
+
+    res.send({
+      message: "Task updated successfully",
+      id: task._id,
+    });
+  } catch (err) {
+    console.error(`Error while updating task: ${err}`);
+    next(err);
+  }
+});
 
 module.exports = router;
