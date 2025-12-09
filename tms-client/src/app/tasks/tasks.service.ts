@@ -31,6 +31,7 @@ export class TaskService {
       update
     );
   }
+deleteTask(id: string){} 
 
   findTask(term: string): Observable<Task[]> {
     const params = new HttpParams().set('term', term);
