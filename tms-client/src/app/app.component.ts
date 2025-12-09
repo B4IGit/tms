@@ -41,6 +41,11 @@ import { NgOptimizedImage } from '@angular/common';
                 <a class="navbar_link" routerLink="/task-list">All Tasks</a>
               </li>
               <li class="nav_item">
+                <a class="navbar_link" routerLink="/tasks/delete"
+                  >Delete Task</a
+                >
+              </li>
+              <li class="nav_item">
                 <a class="navbar_link" routerLink="/tasks/search"
                   >Search Tasks</a
                 >
