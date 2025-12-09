@@ -35,7 +35,7 @@ export class TaskService {
     );
   }
 
-  deleteTask(taskId: string): Observable<{ message: string; taskId: string }> {
+  deleteTask(taskId: string): Observable<{ message: string; taskId: string; }> {
     return this.http.delete<{ message: string; taskId: string }>(
       `${environment.apiBaseUrl}/api/tasks/${taskId}`
     );
