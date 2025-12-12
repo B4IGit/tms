@@ -79,7 +79,7 @@ router.delete("/:taskId", async (req, res, next) => {
 
     return res.status(200).send({
       message: "Task deleted successfully",
-      taskId,
+     id: taskId,
     });
   } catch (err) {
     return next(createError(404, "Not Found"));
