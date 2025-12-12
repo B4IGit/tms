@@ -67,6 +67,10 @@ import {ProjectService} from "../projects.service";
 
         <button class="btn task-add-page_btn" type="submit" [disabled]="projectForm.invalid">Submit</button>
       </form>
+
+      <div>
+        <small class="success" *ngIf="successMessage">{{ successMessage }}</small>
+      </div>
     </div>
 
   `,
@@ -91,6 +95,7 @@ export class AddProjectsComponent {
     endDate: [null],
     dateCreated: [null]
   })
+  successMessage: any;
 
   constructor(private fb: FormBuilder, private router: Router, private projectService: ProjectService) {
   }
@@ -98,9 +103,7 @@ export class AddProjectsComponent {
   onSubmit() {
     if (this.projectForm.valid) {
       const startDate = new Date(this.projectForm.controls['startDate'].value).toISOString()
-
       const endDate = new Date(this.projectForm.controls['endDate'].value).toISOString()
-
       const dateCreated = new Date(this.projectForm.controls['dateCreated'].value).toISOString()
 
       const newProject: AddProjectDTO = {
@@ -116,6 +119,7 @@ export class AddProjectsComponent {
       this.projectService.addProject(newProject).subscribe({
         next: (result) => {
           console.log('Project created:', result);
+          this.successMessage = 'Project created successfully!';
           this.router.navigate(['/projects/projects-list']);
         },
         error: (error) => {

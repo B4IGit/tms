@@ -19,7 +19,6 @@ describe('DeleteTaskComponent', () => {
     serviceStub = jasmine.createSpyObj<TaskService>('TaskService', [
       'deleteTask',
     ]);
-    serviceStub.deleteTask.and.returnValue(of('task deleted'));
     await TestBed.configureTestingModule({
       imports: [
         DeleteTaskComponent,
