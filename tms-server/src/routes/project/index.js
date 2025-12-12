@@ -1,50 +1,12 @@
-/*const express = require("express");
-const router = express.Router();
-const { Project } = require("../../models/project");
-const { addProjectSchema } = require("../../schemas");
-
-// GET return all projects
-router.get("/:id", async (req, res, next) => {
-  try {
-    const projects = await Project.find({});
-    res.send(projects);
-  } catch (err) {
-    console.error(`Error while getting projects: ${err}`);
-    next(err);
-  }
-});
-router.post("/projectId",async (req, res, next) => {
-  
-  try {
-     console.log("here")
-     const payload = {
-      ...req.body,
-     }
-     const project = new Project(payload)
-     project.save()
-     res.send({
-      message:"project created succesfully"
-     })
-  } catch (err) {
-    console.error(`Error while getting projects: ${err}`);
-    next(err);
-  }
-})
-
-
-
-
-
-
-module.exports = router;
-*/
-
-
-
 const express = require("express");
 const router = express.Router();
 const { Project } = require("../../models/project");
 const { addProjectSchema } = require("../../schemas");
+const Ajv = require("ajv");
+const createError = require("http-errors");
+
+const ajv = new Ajv();
+const validateAddProject = ajv.compile(addProjectSchema);
 
 
 // GET /api/projects/:id  
@@ -79,24 +41,29 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// POST request to add a new project
+router.post("/", async (req, res) => {
+    try {
+        const valid = validateAddProject(req.body);
 
-// POST /api/projects  Create a new project
+        if (!valid) {
+            return res.status(400).send({
+                message: ajv.errorsText(validateAddProject.errors),
+            });
+        }
 
-router.post("/", async (req, res, next) => {
-  try {
-    const payload = { ...req.body };
+        const newProject = new Project(req.body);
+        await newProject.save();
 
-    const project = new Project(payload);
-    await project.save();
-
-    return res.status(201).send({
-      message: "Project created successfully",
-      project,
-    });
-  } catch (err) {
-    console.error(`Error while creating project: ${err}`);
-    return res.status(500).send({ message: "Server error" });
-  }
+        return res.status(201).send({
+            message: "Project created successfully",
+            projectId: newProject._id,
+        });
+    } catch (err) {
+        console.error(`Error while creating project: ${err}`);
+        return res.status(500).send({ message: "Server error" });
+    }
 });
+
 
 module.exports = router;
