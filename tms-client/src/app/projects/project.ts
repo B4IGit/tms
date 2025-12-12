@@ -10,7 +10,7 @@ export interface Project {
 }
 export type UpdateProjectDTO = Omit<
   Project,
-  '_id' | 'ProjectId' | 'dateCreated' | 'dateModified'
+  '_id' | 'projectId' | 'dateCreated' | 'dateModified'
 >;
 
 export type AddProjectDTO = Omit<Project, '_id' | 'dateModified' | 'projectId'>;

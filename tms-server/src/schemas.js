@@ -37,7 +37,6 @@ const updateTaskSchema = {
 const addProjectSchema = {
     type: "object",
     properties: {
-        projectId: { type: "number" },
         name: { type: "string", minLength: 3, maxLength: 100 },
         description: { type: "string", maxLength: 500 },
         startDate: {

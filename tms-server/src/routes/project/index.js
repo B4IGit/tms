@@ -46,13 +46,20 @@ router.post("/", async (req, res) => {
     try {
         const valid = validateAddProject(req.body);
 
+        console.log(req.body);
+        console.log(valid);
         if (!valid) {
             return res.status(400).send({
                 message: ajv.errorsText(validateAddProject.errors),
             });
         }
 
-        const newProject = new Project(req.body);
+        const projectWithId = {
+            ...req.body,
+            projectId: Math.floor(1000 + Math.random() * 9000)
+        }
+
+        const newProject = new Project(projectWithId);
         await newProject.save();
 
         return res.status(201).send({
