@@ -1,3 +1,5 @@
+import { Component } from '@angular/core';
+
 export interface Project {
   _id: string;
   projectId: number;
