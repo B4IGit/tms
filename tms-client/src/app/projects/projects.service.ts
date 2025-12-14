@@ -18,9 +18,9 @@ export class ProjectService {
     );
   }
 
-  addProject(project: AddProjectDTO, projectId: number = 1000) {
+  addProject(project: AddProjectDTO) {
     return this.http.post<Project>(
-      `${environment.apiBaseUrl}/api/projects/${projectId}`,
+      `${environment.apiBaseUrl}/api/projects/`,
       project
     );
   }

@@ -37,6 +37,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         <li>
           <a routerLink="/projects/projects-list">All Projects</a>
         </li>
+        <li>
+          <a routerLink="/projects/projects-add">Add Project</a>
+        </li>
       </ul>
     </nav>
   `,
