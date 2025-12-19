@@ -43,6 +43,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         <li>
           <a routerLink="/projects/project-update">Update Project</a>
         </li>
+        <li>
+          <a routerLink="/projects/projects-delete">Delete Project</a>
+        </li>
       </ul>
     </nav>
   `,

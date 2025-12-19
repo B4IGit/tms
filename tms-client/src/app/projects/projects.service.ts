@@ -12,6 +12,14 @@ export class ProjectService {
     return this.http.get<Project[]>(`${environment.apiBaseUrl}/api/projects`);
   }
 
+  deleteProjects(
+    projectId: string
+  ): Observable<{ message: string; projectId: string }> {
+    return this.http.delete<{ message: string; projectId: string }>(
+      `${environment.apiBaseUrl}/api/projects/${projectId}`
+    );
+  }
+
   getProjectById(projectId: string): Observable<Project> {
     return this.http.get<Project>(
       `${environment.apiBaseUrl}/api/projects/${projectId}`

@@ -10,7 +10,6 @@ const validateAddProject = ajv.compile(addProjectSchema);
 const validateUpdateProject = ajv.compile(updateProjectSchema);
 
 // GET /api/projects/:id
-
 router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -28,8 +27,27 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-// GET /api/projects  Return all projects
+// DELETE /api/projects/:id - delete a project by id
+router.delete("/:projectId", async (req, res, next) => {
+  try {
+    const { projectId } = req.params;
 
+    const result = await Project.deleteOne({ _id: projectId });
+
+    if (!result || result.deletedCount === 0) {
+      return next(createError(404, "Not Found"));
+    }
+
+    return res.status(200).send({
+      message: "Project deleted successfully",
+      id: projectId,
+    });
+  } catch (err) {
+    return next(createError(404, "Not Found"));
+  }
+});
+
+// GET /api/projects  Return all projects
 router.get("/", async (req, res, next) => {
   try {
     const projects = await Project.find({});
