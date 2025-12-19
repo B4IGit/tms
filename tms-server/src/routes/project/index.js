@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const { Project } = require("../../models/project");
-const { addProjectSchema } = require("../../schemas");
+const { addProjectSchema, updateProjectSchema } = require("../../schemas");
 const Ajv = require("ajv");
 const createError = require("http-errors");
 
 const ajv = new Ajv();
 const validateAddProject = ajv.compile(addProjectSchema);
+const validateUpdateProject = ajv.compile(updateProjectSchema);
+
 
 
 // GET /api/projects/:id  
@@ -72,5 +74,33 @@ router.post("/", async (req, res) => {
     }
 });
 
+// PATCH request to update a project
+router.patch("/:id", async (req, res, next) => {
+    try {
+        const projectId = req.params.id;
+        const project = await Project.findOne({ _id: projectId });
+
+        const valid = validateUpdateProject(req.body);
+
+        if (!project) {
+            return next(createError(404, `Project with ID ${projectId} not found`));
+        }
+
+        if (!valid) {
+            return next(createError(400, ajv.errorsText((validateUpdateProject.errors))))
+        }
+
+        project.set(req.body);
+        await project.save();
+
+        res.send({
+            message: "Project updated successfully",
+            id: project._id,
+        })
+    } catch (err) {
+        console.error(`Error while updating project: ${err}`);
+        next(err);
+    }
+})
 
 module.exports = router;

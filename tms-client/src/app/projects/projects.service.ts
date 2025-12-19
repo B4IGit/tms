@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { AddProjectDTO, Project } from './project';
+import { AddProjectDTO, Project, UpdateProjectDTO } from './project';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -19,6 +19,13 @@ export class ProjectService {
 
   addProject(project: AddProjectDTO, projectId: number = 1000) {
     return this.http.post<Project>(`/api/projects/${projectId}`,
+      project
+    );
+  }
+
+  updateProject(id: string, project: UpdateProjectDTO) {
+    return this.http.patch<{ message: string; id: string }>(
+      `/api/projects/${id}`,
       project
     );
   }

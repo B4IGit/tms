@@ -40,6 +40,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         <li>
           <a routerLink="/projects/projects-add">Add Project</a>
         </li>
+        <li>
+          <a routerLink="/projects/projects-update">Update Project</a>
+        </li>
       </ul>
     </nav>
   `,

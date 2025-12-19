@@ -54,8 +54,26 @@ const addProjectSchema = {
     }
 }
 
+const updateProjectSchema = {
+    type: "object",
+    properties: {
+        name: { type: "string", minLength: 3, maxLength: 100 },
+        description: { type: "string", maxLength: 500 },
+        startDate: {
+            type: "string",
+            pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+        },
+        endDate: {
+            type: "string",
+            pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+        }
+    },
+    additionalProperties: false,
+}
+
 module.exports = {
     addTaskSchema,
     updateTaskSchema,
-    addProjectSchema
+    addProjectSchema,
+    updateProjectSchema
 };
