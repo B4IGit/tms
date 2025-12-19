@@ -75,16 +75,51 @@ import {ProjectService} from "../projects.service";
 
   `,
   styles: `
-    .task-add-page { max-width: 720px; margin: 0 auto; padding: 1rem; }
-    .task-add-page_title { margin: 0 0 .25rem 0; }
-    .task-add-page_subtitle { margin: 0 0 1rem 0; color: #666; font-weight: 400; }
-    .task-add-page_form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: .25rem; }
-    .task-add-page_form-label { font-weight: 600; }
-    .task-add-page_form-control { padding: .5rem .75rem; border: 1px solid #ccc; border-radius: 4px; }
-    .task-add-page_btn { background: var(--medium_blue); color: #fff; border: 0; padding: .5rem 1rem; border-radius: 4px; cursor: pointer; }
-    .task-add-page_btn:disabled { opacity: .6; cursor: not-allowed; }
-    .success { color: #1abc9c; margin-top: .75rem; }
-    .error { color: #e74c3c; margin-top: .75rem; }
+    .task-add-page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    .task-add-page_title {
+      margin: 0 0 .25rem 0;
+    }
+    .task-add-page_subtitle {
+      margin: 0 0 1rem 0;
+      color: #666; font-weight: 400;
+    }
+    .task-add-page_form-group {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+    }
+    .task-add-page_form-label {
+      font-weight: 600;
+    }
+    .task-add-page_form-control {
+      padding: .5rem .75rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .task-add-page_btn {
+      background: var(--medium_blue);
+      color: #fff;
+      border: 0;
+      padding: .5rem 1rem;
+      border-radius: 4px; cursor: pointer;
+    }
+    .task-add-page_btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+    .success {
+      color: #1abc9c;
+      margin-top: .75rem;
+    }
+    .error {
+      color: #e74c3c;
+      margin-top: .75rem;
+    }
   `
 })
 export class AddProjectsComponent {

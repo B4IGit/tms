@@ -101,5 +101,35 @@ router.post("/", async (req, res) => {
     return res.status(500).send({ message: "Server error" });
   }
 });
+// PATCH request to update a project
+router.patch("/:id", async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    const project = await Project.findOne({ _id: projectId });
+
+    const valid = validateUpdateProject(req.body);
+
+    if (!project) {
+      return next(createError(404, `Project with ID ${projectId} not found`));
+    }
+
+    if (!valid) {
+      return next(
+        createError(400, ajv.errorsText(validateUpdateProject.errors))
+      );
+    }
+
+    project.set(req.body);
+    await project.save();
+
+    res.send({
+      message: "Project updated successfully",
+      id: project._id,
+    });
+  } catch (err) {
+    console.error(`Error while updating project: ${err}`);
+    next(err);
+  }
+});
 
 module.exports = router;

@@ -68,7 +68,72 @@ describe("Project API", () => {
           expect(response.body.message).toContain("must match pattern");
       });
 
+      describe("PATCH /api/projects/:id", () => {
+          it("should update a project successfully", async () => {
+              const mockProject = {
+                  _id: "693f4e2877c9322b37298f4c",
+                  name: "Dog Walk",
+                  description: "A beautiful walk.",
+                  startDate: "2021-01-05T00:00:00.000Z",
+                  endDate: "2021-01-05T00:00:00.000Z",
+                  set: jest.fn(),
+                  save: jest.fn().mockResolvedValue(true),
+              };
 
+              Project.findOne.mockResolvedValue(mockProject);
 
+              const response = await request(app).patch("/api/projects/693f4e2877c9322b37298f4c").send({
+                  name: "Dog Walk",
+                  description: "A beautiful walk.",
+                  startDate: "2021-01-05T00:00:00.000Z",
+                  endDate: "2021-01-05T00:00:00.000Z",
+              });
+
+              expect(response.status).toBe(200);
+              expect(response.body.message).toBe("Project updated successfully");
+          });
+
+          it("should return validation error for invalid type", async () => {
+              const mockProject = {
+                  _id: "693f4e2877c9322b37298f4c",
+                  name: "Dog Walk",
+                  description: "A beautiful walk.",
+                  startDate: "2021-01-05T00:00:00.000Z",
+                  endDate: "2021-01-05T00:00:00.000Z",
+                  set: jest.fn(),
+                  save: jest.fn().mockResolvedValue(true),
+              };
+
+              Project.findOne.mockResolvedValue(mockProject);
+
+              const response = await request(app).patch("/api/projects/1").send({
+                  name: "T",
+                  description: "Test".repeat(501),
+              });
+
+              expect(response.status).toBe(400);
+              const errorMessages = response.body.message;
+
+              expect(errorMessages).toContain("must NOT have fewer than 3 characters");
+          });
+
+          it("should return 404 if project is not found", async () => {
+              const invalidProjectId = "692ca8ba8c7337c8d4931d0c"
+
+              Project.findOne.mockResolvedValue(null);
+
+              const response = await request(app).patch(`/api/projects/${invalidProjectId}`).send({
+                  name: "Dog Walk",
+                  description: "A beautiful walk.",
+                  startDate: "2021-01-05T00:00:00.000Z",
+                  endDate: "2021-01-05T00:00:00.000Z",
+              });
+
+              expect(response.status).toBe(404);
+              expect(response.body.message).toBe(`Project with ID ${invalidProjectId} not found`);
+              expect(Project.findOne).toHaveBeenCalledWith({ _id: invalidProjectId
+              });
+          })
+      })
   })
 });

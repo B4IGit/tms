@@ -20,7 +20,7 @@ describe('DeleteTaskComponent', () => {
       'deleteTask',
     ]);
     serviceStub.deleteTask.and.returnValue(
-      of({ message: 'task deleted', taskId: '' })
+      of({ message: 'task deleted', taskId: '123' })
     );
     await TestBed.configureTestingModule({
       imports: [
