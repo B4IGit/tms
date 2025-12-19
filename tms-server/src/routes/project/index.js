@@ -49,7 +49,7 @@ router.patch("/:id", async (req, res, next) => {
     const valid = validateUpdateProject(req.body);
 
     if (!project) {
-      return next(createError(404, `project with ID ${projectId} not found`));
+      return next(createError(404, `Project with ID ${projectId} not found`));
     }
 
     if (!valid) {
@@ -62,7 +62,7 @@ router.patch("/:id", async (req, res, next) => {
     await project.save();
 
     res.send({
-      message: "project updated successfully",
+      message: "Project updated successfully",
       id: project._id,
     });
   } catch (err) {

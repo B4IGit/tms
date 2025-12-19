@@ -8,7 +8,6 @@ import { ProjectService } from './projects.service';
 import { environment } from '../../environments/environment';
 import { Project } from './project';
 
-
 describe('ProjectService', () => {
   let service: ProjectService;
   let httpMock: HttpTestingController;
@@ -58,7 +57,7 @@ describe('ProjectService', () => {
       expect(Projects).toEqual(mockProjects);
     });
 
-    const req = httpMock.expectOne(`/api/projects`);
+    const req = httpMock.expectOne(`http://localhost:3000/api/projects`);
     expect(req.request.method).toBe('GET');
     req.flush(mockProjects);
   });

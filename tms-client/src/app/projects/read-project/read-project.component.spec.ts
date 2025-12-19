@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReadProjectComponent } from './read-project.component';
-import {HttpClientTestingModule, HttpTestingController,} from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
 import { Project } from '../project';
 
@@ -41,16 +44,14 @@ describe('ReadProjectComponent', () => {
     httpMock.verify();
   });
 
-  
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  
   it('should retrieve project by ID on init', () => {
     fixture.detectChanges(); // triggers ngOnInit
 
-    const req = httpMock.expectOne('/api/projects/1000');
+    const req = httpMock.expectOne('http://localhost:3000/api/projects/1000');
     expect(req.request.method).toBe('GET');
 
     req.flush(mockProject);
@@ -59,11 +60,10 @@ describe('ReadProjectComponent', () => {
     expect(component.loading).toBeFalse();
   });
 
-  
   it('should handle error when project retrieval fails', () => {
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('/api/projects/1000');
+    const req = httpMock.expectOne('http://localhost:3000/api/projects/1000');
 
     req.flush('Error', {
       status: 500,
