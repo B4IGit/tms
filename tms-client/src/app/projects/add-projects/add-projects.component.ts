@@ -1,27 +1,31 @@
 import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgIf} from "@angular/common";
-import {AddProjectDTO} from "../project";
-import {Router} from "@angular/router";
-import {ProjectService} from "../projects.service";
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { AddProjectDTO } from '../project';
+import { Router } from '@angular/router';
+import { ProjectService } from '../projects.service';
 
 @Component({
   selector: 'app-add-projects',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf
-  ],
+  imports: [ReactiveFormsModule, NgIf],
   template: `
     <div class="task-add-page">
       <h1 class="task-add-page_title">Add New Project</h1>
       <h4 class="task-add-page_subtitle">
-        Create a project by providing its name, description, and  dates.
+        Create a project by providing its name, description, and dates.
       </h4>
 
       <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="task-add-page_form-group">
-          <label for="name" class="task-add-page_form-label">Project Name</label>
+          <label for="name" class="task-add-page_form-label"
+            >Project Name</label
+          >
           <input
             id="name"
             type="text"
@@ -29,13 +33,21 @@ import {ProjectService} from "../projects.service";
             formControlName="name"
             placeholder="Enter project name"
           />
-          <small class="error" *ngIf="projectForm.get('name')?.invalid && projectForm.get('name')?.touched">
+          <small
+            class="error"
+            *ngIf="
+              projectForm.get('name')?.invalid &&
+              projectForm.get('name')?.touched
+            "
+          >
             Name is required (min 3 characters).
           </small>
         </div>
 
         <div class="task-add-page_form-group">
-          <label for="description" class="task-add-page_form-label">Description</label>
+          <label for="description" class="task-add-page_form-label"
+            >Description</label
+          >
           <textarea
             id="description"
             rows="4"
@@ -46,7 +58,9 @@ import {ProjectService} from "../projects.service";
         </div>
 
         <div class="task-add-page_form-group">
-          <label for="startDate" class="task-add-page_form-label">Start Date</label>
+          <label for="startDate" class="task-add-page_form-label"
+            >Start Date</label
+          >
           <input
             id="startDate"
             type="date"
@@ -65,14 +79,21 @@ import {ProjectService} from "../projects.service";
           />
         </div>
 
-        <button class="btn task-add-page_btn" type="submit" [disabled]="projectForm.invalid">Submit</button>
+        <button
+          class="btn task-add-page_btn"
+          type="submit"
+          [disabled]="projectForm.invalid"
+        >
+          Submit
+        </button>
       </form>
 
       <div>
-        <small class="success" *ngIf="successMessage">{{ successMessage }}</small>
+        <small class="success" *ngIf="successMessage">{{
+          successMessage
+        }}</small>
       </div>
     </div>
-
   `,
   styles: `
     .task-add-page {
@@ -120,7 +141,7 @@ import {ProjectService} from "../projects.service";
       color: #e74c3c;
       margin-top: .75rem;
     }
-  `
+  `,
 })
 export class AddProjectsComponent {
   projectForm: FormGroup = this.fb.group({
@@ -128,26 +149,35 @@ export class AddProjectsComponent {
     description: [null],
     startDate: [null],
     endDate: [null],
-    dateCreated: [null]
-  })
+    dateCreated: [null],
+  });
   successMessage: any;
 
-  constructor(private fb: FormBuilder, private router: Router, private projectService: ProjectService) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private projectService: ProjectService
+  ) {}
 
   onSubmit() {
     if (this.projectForm.valid) {
-      const startDate = new Date(this.projectForm.controls['startDate'].value).toISOString()
-      const endDate = new Date(this.projectForm.controls['endDate'].value).toISOString()
-      const dateCreated = new Date(this.projectForm.controls['dateCreated'].value).toISOString()
+      const startDate = new Date(
+        this.projectForm.controls['startDate'].value
+      ).toISOString();
+      const endDate = new Date(
+        this.projectForm.controls['endDate'].value
+      ).toISOString();
+      const dateCreated = new Date(
+        this.projectForm.controls['dateCreated'].value
+      ).toISOString();
 
       const newProject: AddProjectDTO = {
         name: this.projectForm.controls['name'].value,
         description: this.projectForm.controls['description'].value,
         startDate: startDate,
         endDate: endDate,
-        dateCreated: dateCreated
-      }
+        dateCreated: dateCreated,
+      };
 
       console.log('Creating Project:', newProject);
 
@@ -159,9 +189,8 @@ export class AddProjectsComponent {
         },
         error: (error) => {
           console.error('Error creating project:', error);
-        }
-        }
-      )
+        },
+      });
     }
   }
 }

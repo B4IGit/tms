@@ -10,6 +10,7 @@ import { DeleteTaskComponent } from './tasks/delete-task/delete-task.component';
 import { AddProjectsComponent } from './projects/add-projects/add-projects.component';
 import { ProjectUpdateComponent } from './projects/update-project/update-project.component';
 import { DeleteProjectComponent } from './projects/delete-project/delete-project.component';
+import { ProjectFindComponent } from './projects/find-projects/find-projects.component';
 
 // Lazy-load the MainLayout which contains the aside navigation
 const loadMainLayout = () =>
@@ -42,6 +43,7 @@ const layoutRoutes: Route = {
         { path: 'project-update', component: ProjectUpdateComponent },
         { path: 'projects-add', component: AddProjectsComponent },
         { path: 'projects-delete', component: DeleteProjectComponent },
+        { path: 'projects-find', component: ProjectFindComponent },
       ],
     },
   ],

@@ -9,6 +9,28 @@ const ajv = new Ajv();
 const validateAddProject = ajv.compile(addProjectSchema);
 const validateUpdateProject = ajv.compile(updateProjectSchema);
 
+// GET return task that matches search term
+router.get("/search", async (req, res, next) => {
+  try {
+    const { term } = req.query;
+
+    if (!term) {
+      return res.status(400).send({ message: "Missing search term" });
+    }
+
+    const regex = new RegExp(term, "i");
+
+    const results = await Project.find({
+      $or: [{ name: regex }, { description: regex }],
+    });
+
+    res.send(results);
+  } catch (err) {
+    console.error(`Error while creating task: ${err}`);
+    next(err);
+  }
+});
+
 // GET /api/projects/:id
 router.get("/:id", async (req, res, next) => {
   try {

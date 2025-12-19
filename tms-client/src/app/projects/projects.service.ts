@@ -36,14 +36,20 @@ export class ProjectService {
     );
   }
 
-  addProject(project: AddProjectDTO, projectId: number = 1000) {
-    return this.http.post<Project>(`/api/projects/${projectId}`, project);
+  addProject(project: AddProjectDTO) {
+    return this.http.post<Project>(
+      `${environment.apiBaseUrl}/api/projects`,
+      project
+    );
   }
 
   findProject(term: string): Observable<Project[]> {
     const params = new HttpParams().set('term', term);
-    return this.http.get<Project[]>(`/api/projects/search`, {
-      params,
-    });
+    return this.http.get<Project[]>(
+      `${environment.apiBaseUrl}/api/projects/search`,
+      {
+        params,
+      }
+    );
   }
 }

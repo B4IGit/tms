@@ -71,6 +71,16 @@ import { NgOptimizedImage } from '@angular/common';
                   >Delete Project</a
                 >
               </li>
+              <li class="nav_item">
+                <a class="navbar_link" routerLink="/projects/projects-find"
+                  >Find Project</a
+                >
+              </li>
+              <li class="nav_item">
+                <a class="navbar_link" routerLink="/projects/projects-add"
+                  >Add Project</a
+                >
+              </li>
             </ul>
             <button class="btn login_btn">
               <svg
