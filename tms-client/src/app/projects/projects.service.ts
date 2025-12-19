@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { AddProjectDTO, Project } from './project';
+import { AddProjectDTO, Project, UpdateProjectDTO } from './project';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -12,9 +12,19 @@ export class ProjectService {
     return this.http.get<Project[]>(`${environment.apiBaseUrl}/api/projects`);
   }
 
-  getProjectById(id: string): Observable<Project> {
+  getProjectById(projectId: string): Observable<Project> {
     return this.http.get<Project>(
-      `/${environment.apiBaseUrl}api/projects/${id}`
+      `${environment.apiBaseUrl}/api/projects/${projectId}`
+    );
+  }
+
+  updateProject(
+    projectId: string,
+    project: UpdateProjectDTO
+  ): Observable<{ message: string; id: string } | Project> {
+    return this.http.patch<Project>(
+      `${environment.apiBaseUrl}/api/projects/${projectId}`,
+      project
     );
   }
 
